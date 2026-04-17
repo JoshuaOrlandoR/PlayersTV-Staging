@@ -12,8 +12,8 @@ const nunito = Nunito({
 })
 
 export const metadata: Metadata = {
-  title: 'Invest in iotty',
-  description: 'Invest in iotty and receive bonus shares based on your investment amount.',
+  title: 'Invest in PlayersTV',
+  description: 'Invest in PlayersTV and receive bonus shares based on your investment amount.',
   icons: {
     icon: [
       {
