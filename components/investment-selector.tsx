@@ -111,10 +111,10 @@ export function InvestmentSelector({ selectedAmount, onAmountChange }: Investmen
               {/* Bonus pills */}
               {calc.bonusPercent > 0 && (
                 <div className="flex items-center gap-2">
-                  <span className="px-3 py-1.5 bg-[#52b4f9] text-white text-xs font-bold rounded-full whitespace-nowrap">
+                  <span className="px-3 py-1.5 bg-[#8a0000] text-white text-xs font-bold rounded-full whitespace-nowrap">
                     +{formatNumber(calc.bonusShares)} Free Shares
                   </span>
-                  <span className="px-2.5 py-1.5 bg-[#52b4f9] text-white text-xs font-bold rounded-full whitespace-nowrap">
+                  <span className="px-2.5 py-1.5 bg-[#8a0000] text-white text-xs font-bold rounded-full whitespace-nowrap">
                     {calc.bonusPercent}% Bonus
                   </span>
                 </div>

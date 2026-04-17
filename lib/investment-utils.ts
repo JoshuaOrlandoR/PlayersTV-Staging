@@ -14,20 +14,19 @@ export interface InvestmentConfig {
 }
 
 export const FALLBACK_CONFIG: InvestmentConfig = {
-  sharePrice: 1.00,
+  sharePrice: 5.00,
   minInvestment: 1000,
   investorFeePercent: 2,
   campaignRaised: 14000000,
   campaignGoal: 17000000,
-  // Presets aligned to $1.00/share for whole share counts
-  presetAmounts: [2500, 5000, 10000, 25000, 50000, 100000],
+  // Presets aligned to $5.00/share for whole share counts
+  presetAmounts: [1000, 2500, 5000, 10000, 25000],
   volumeTiers: [
-    { threshold: 100000, bonusPercent: 30 },
-    { threshold: 50000, bonusPercent: 25 },
-    { threshold: 25000, bonusPercent: 20 },
-    { threshold: 10000, bonusPercent: 15 },
-    { threshold: 5000, bonusPercent: 10 },
-    { threshold: 2500, bonusPercent: 5 },
+    { threshold: 25000, bonusPercent: 25 },
+    { threshold: 10000, bonusPercent: 20 },
+    { threshold: 5000, bonusPercent: 15 },
+    { threshold: 2500, bonusPercent: 10 },
+    { threshold: 1000, bonusPercent: 5 },
   ],
 }
 

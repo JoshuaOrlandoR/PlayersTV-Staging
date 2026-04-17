@@ -1,42 +1,44 @@
 /* Investment Flow Styles */
 
 :root {
-  /* Brand Colors - iotty */
-  --brand-primary: #52b4f9;
-  --brand-primary-hover: #3a9fe0;
+  /* Brand Colors - PlayersTV */
+  --brand-primary: #f8231b;
+  --brand-primary-hover: #d91e17;
   --brand-white: #ffffff;
-  --brand-text: #2c3345;
-  --brand-title: #000000;
-  --brand-error: #cb3837;
+  --brand-black: #0a0a0a;
+  --brand-card: #181818;
+  --brand-text: #ffffff;
+  --brand-title: #ffffff;
+  --brand-error: #ff4444;
   --brand-success: #22c55e;
 
   /* Applied Theme */
   --inv-primary: var(--brand-primary);
   --inv-primary-hover: var(--brand-primary-hover);
-  --inv-primary-light: #e8f4fd;
-  --inv-primary-lighter: #f0f8ff;
-  --inv-primary-border: #147bc3;
-  --inv-primary-text: var(--brand-text);
+  --inv-primary-light: #3d1a19;
+  --inv-primary-lighter: #2a1515;
+  --inv-primary-border: var(--brand-primary);
+  --inv-primary-text: var(--brand-white);
 
-  --inv-bg-step1: var(--brand-white);
-  --inv-bg-step2: var(--brand-white);
-  --inv-bg-card: var(--brand-white);
-  --inv-bg-input: #f5f7fa;
-  --inv-bg-input-hover: #ebeef3;
+  --inv-bg-step1: var(--brand-black);
+  --inv-bg-step2: var(--brand-black);
+  --inv-bg-card: var(--brand-card);
+  --inv-bg-input: #242424;
+  --inv-bg-input-hover: #2e2e2e;
 
   --inv-text-dark: var(--brand-title);
   --inv-text-medium: var(--brand-text);
-  --inv-text-light: #5a6275;
-  --inv-text-muted: #7a8299;
-  --inv-text-faint: #a0a8b8;
+  --inv-text-light: #b0b0b0;
+  --inv-text-muted: #808080;
+  --inv-text-faint: #606060;
 
-  --inv-border: #147bc3;
-  --inv-border-light: #d1d9e6;
-  --inv-border-section: #e2e8f0;
+  --inv-border: var(--brand-primary);
+  --inv-border-light: #333333;
+  --inv-border-section: #333333;
 
   --inv-success: var(--brand-success);
   --inv-error: var(--brand-error);
-  --inv-disabled: #b8c4d4;
+  --inv-disabled: #4a4a4a;
   
   /* Sizing */
   --inv-radius-sm: 0.5rem;
@@ -81,7 +83,7 @@
 
 /* --- Share Count Info --- */
 .step1-shares-info__count {
-  color: #777;
+  color: var(--inv-text-muted);
 }
 .step1-shares-info__minimum {
   color: var(--inv-text-muted);
@@ -195,7 +197,7 @@
   color: var(--inv-primary);
 }
 .step1-progress__bar {
-  background-color: #e8e4e0;
+  background-color: #333333;
 }
 .step1-progress__fill {
   background-color: var(--inv-primary);
@@ -204,7 +206,7 @@
 /* --- Mobile Sticky Bar --- */
 .step1-mobile-bar {
   background-color: var(--inv-bg-card);
-  border-color: #e8e4e0;
+  border-color: #333333;
 }
 .step1-mobile-bar__text {
   color: var(--inv-text-medium);
@@ -234,7 +236,7 @@
   color: var(--inv-text-dark);
 }
 .step2-section__checkbox {
-  border-color: #d1d5db;
+  border-color: #444444;
 }
 .step2-section__icon--success {
   color: var(--inv-success);
@@ -242,8 +244,8 @@
 
 /* --- Inputs --- */
 .step2-input {
-  border-color: #d1d5db;
-  color: #374151;
+  border-color: #444444;
+  color: var(--inv-text-dark);
 }
 .step2-input:focus {
   border-color: var(--inv-primary);
@@ -263,7 +265,7 @@
   border-color: var(--inv-border-section);
 }
 .step2-contact-field__label {
-  color: #6b7280;
+  color: var(--inv-text-muted);
 }
 .step2-contact-field__input {
   color: var(--inv-text-dark);
@@ -271,7 +273,7 @@
 
 /* --- Contact Summary --- */
 .step2-contact-summary__label {
-  color: #6b7280;
+  color: var(--inv-text-muted);
 }
 .step2-contact-summary__value {
   color: var(--inv-text-dark);
@@ -293,5 +295,5 @@
   text-decoration: underline;
 }
 .step2-footer__separator {
-  color: #d1d5db;
+  color: #444444;
 }

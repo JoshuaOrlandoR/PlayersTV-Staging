@@ -621,18 +621,18 @@ export function StepTwoDetails({
   }
 
   const inputClass = (field: string) => 
-    `w-full pl-10 pr-4 py-3 border rounded-lg text-[#2c3345] text-sm bg-[#f5f7fa] placeholder:text-[#7a8299] focus:outline-none focus:border-[#52b4f9] focus:ring-2 focus:ring-[#52b4f9]/20 transition-all ${
-      touched[field] && errors[field] ? "border-[#cb3837]" : "border-[#d1d9e6]"
+    `w-full pl-10 pr-4 py-3 border rounded-lg text-white text-sm bg-[#242424] placeholder:text-[#808080] focus:outline-none focus:border-[#f8231b] focus:ring-2 focus:ring-[#f8231b]/20 transition-all ${
+      touched[field] && errors[field] ? "border-[#ff4444]" : "border-[#333333]"
     }`
 
   const inputClassNoIcon = (field: string) => 
-    `w-full px-4 py-3 border rounded-lg text-[#2c3345] text-sm bg-[#f5f7fa] placeholder:text-[#7a8299] focus:outline-none focus:border-[#52b4f9] focus:ring-2 focus:ring-[#52b4f9]/20 transition-all ${
-      touched[field] && errors[field] ? "border-[#cb3837]" : "border-[#d1d9e6]"
+    `w-full px-4 py-3 border rounded-lg text-white text-sm bg-[#242424] placeholder:text-[#808080] focus:outline-none focus:border-[#f8231b] focus:ring-2 focus:ring-[#f8231b]/20 transition-all ${
+      touched[field] && errors[field] ? "border-[#ff4444]" : "border-[#333333]"
     }`
 
   const selectClass = (field: string) =>
-    `w-full px-4 py-3 border rounded-lg text-[#2c3345] text-sm bg-[#f5f7fa] focus:outline-none focus:border-[#52b4f9] focus:ring-2 focus:ring-[#52b4f9]/20 transition-all appearance-none cursor-pointer ${
-      touched[field] && errors[field] ? "border-[#cb3837]" : "border-[#d1d9e6]"
+    `w-full px-4 py-3 border rounded-lg text-white text-sm bg-[#242424] focus:outline-none focus:border-[#f8231b] focus:ring-2 focus:ring-[#f8231b]/20 transition-all appearance-none cursor-pointer ${
+      touched[field] && errors[field] ? "border-[#ff4444]" : "border-[#333333]"
     }`
 
   // Helper to get entity name placeholder
@@ -661,7 +661,7 @@ export function StepTwoDetails({
     <div className="min-h-screen flex items-start justify-center px-3 pb-4 md:px-4 md:pb-8 bg-transparent">
       <div className="w-full max-w-[600px]">
         {/* Main Card */}
-        <div className="bg-white rounded-xl border-2 border-[#147bc3] overflow-hidden">
+        <div className="bg-[#181818] rounded-xl border-2 border-[#f8231b] overflow-hidden">
           <div className="p-4 md:p-6">
             {/* Timeline */}
             <StepTimeline currentStep={2} />
@@ -669,8 +669,8 @@ export function StepTwoDetails({
             {/* Investor Type */}
             <div className="mb-4 mt-4">
               <div className="flex items-center gap-1 mb-2">
-                <label className="text-sm text-[#7a8299]">Who is making the investment?</label>
-                <HelpCircle className="w-4 h-4 text-[#7a8299]" />
+                <label className="text-sm text-[#808080]">Who is making the investment?</label>
+                <HelpCircle className="w-4 h-4 text-[#808080]" />
               </div>
               <div className="relative">
                 <select
@@ -689,7 +689,7 @@ export function StepTwoDetails({
                   ))}
                 </select>
                 <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                  <svg className="w-4 h-4 text-[#7a8299]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 text-[#808080]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </div>
@@ -700,7 +700,7 @@ export function StepTwoDetails({
             {["corporation", "trust", "llc", "partnership"].includes(investorType) && (
               <div className="mb-4">
                 <div className="relative">
-                  <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7a8299]" />
+                  <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#808080]" />
                   <input
                     type="text"
                     value={entityName}
@@ -711,7 +711,7 @@ export function StepTwoDetails({
                   />
                 </div>
                 {touched.entityName && errors.entityName && (
-                  <p className="text-xs text-[#cb3837] mt-1">{errors.entityName}</p>
+                  <p className="text-xs text-[#ff4444] mt-1">{errors.entityName}</p>
                 )}
               </div>
             )}
@@ -719,7 +719,7 @@ export function StepTwoDetails({
             {/* First Name */}
             <div className="mb-4">
               <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7a8299]" />
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#808080]" />
                 <input
                   type="text"
                   value={firstName}
@@ -730,14 +730,14 @@ export function StepTwoDetails({
                 />
               </div>
               {touched.firstName && errors.firstName && (
-                <p className="text-xs text-[#cb3837] mt-1">{errors.firstName}</p>
+                <p className="text-xs text-[#ff4444] mt-1">{errors.firstName}</p>
               )}
             </div>
 
             {/* Last Name */}
             <div className="mb-4">
               <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7a8299]" />
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#808080]" />
                 <input
                   type="text"
                   value={lastName}
@@ -748,7 +748,7 @@ export function StepTwoDetails({
                 />
               </div>
               {touched.lastName && errors.lastName && (
-                <p className="text-xs text-[#cb3837] mt-1">{errors.lastName}</p>
+                <p className="text-xs text-[#ff4444] mt-1">{errors.lastName}</p>
               )}
             </div>
 
@@ -757,7 +757,7 @@ export function StepTwoDetails({
               <>
                 <div className="mb-4">
                   <div className="relative">
-                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7a8299]" />
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#808080]" />
                     <input
                       type="text"
                       value={jointFirstName}
@@ -768,12 +768,12 @@ export function StepTwoDetails({
                     />
                   </div>
                   {touched.jointFirstName && errors.jointFirstName && (
-                    <p className="text-xs text-[#cb3837] mt-1">{errors.jointFirstName}</p>
+                    <p className="text-xs text-[#ff4444] mt-1">{errors.jointFirstName}</p>
                   )}
                 </div>
                 <div className="mb-4">
                   <div className="relative">
-                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7a8299]" />
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#808080]" />
                     <input
                       type="text"
                       value={jointLastName}
@@ -784,7 +784,7 @@ export function StepTwoDetails({
                     />
                   </div>
                   {touched.jointLastName && errors.jointLastName && (
-                    <p className="text-xs text-[#cb3837] mt-1">{errors.jointLastName}</p>
+                    <p className="text-xs text-[#ff4444] mt-1">{errors.jointLastName}</p>
                   )}
                 </div>
               </>
@@ -793,7 +793,7 @@ export function StepTwoDetails({
             {/* Street Address */}
             <div className="mb-4">
               <div className="relative">
-                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7a8299]" />
+                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#808080]" />
                 <input
                   type="text"
                   value={streetAddress}
@@ -804,7 +804,7 @@ export function StepTwoDetails({
                 />
               </div>
               {touched.streetAddress && errors.streetAddress && (
-                <p className="text-xs text-[#cb3837] mt-1">{errors.streetAddress}</p>
+                <p className="text-xs text-[#ff4444] mt-1">{errors.streetAddress}</p>
               )}
             </div>
 
@@ -822,7 +822,7 @@ export function StepTwoDetails({
             {/* City */}
             <div className="mb-4">
               <div className="relative">
-                <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7a8299]" />
+                <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#808080]" />
                 <input
                   type="text"
                   value={city}
@@ -833,7 +833,7 @@ export function StepTwoDetails({
                 />
               </div>
               {touched.city && errors.city && (
-                <p className="text-xs text-[#cb3837] mt-1">{errors.city}</p>
+                <p className="text-xs text-[#ff4444] mt-1">{errors.city}</p>
               )}
             </div>
 
@@ -848,14 +848,14 @@ export function StepTwoDetails({
                 className={inputClassNoIcon("postalCode")}
               />
               {touched.postalCode && errors.postalCode && (
-                <p className="text-xs text-[#cb3837] mt-1">{errors.postalCode}</p>
+                <p className="text-xs text-[#ff4444] mt-1">{errors.postalCode}</p>
               )}
             </div>
 
             {/* Country & State Row */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
               <div>
-                <label className="text-[0.625rem] text-[#7a8299] mb-1 block uppercase tracking-wide">Country</label>
+                <label className="text-[0.625rem] text-[#808080] mb-1 block uppercase tracking-wide">Country</label>
                 <div className="relative">
                   <select
                     value={country}
@@ -870,14 +870,14 @@ export function StepTwoDetails({
                     ))}
                   </select>
                   <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                    <svg className="w-4 h-4 text-[#7a8299]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4 text-[#808080]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
                   </div>
                 </div>
               </div>
               <div>
-                <label className="text-[0.625rem] text-[#7a8299] mb-1 block uppercase tracking-wide">State / Province</label>
+                <label className="text-[0.625rem] text-[#808080] mb-1 block uppercase tracking-wide">State / Province</label>
                 <div className="relative">
                   <select
                     value={state}
@@ -892,13 +892,13 @@ export function StepTwoDetails({
                     ))}
                   </select>
                   <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                    <svg className="w-4 h-4 text-[#7a8299]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4 text-[#808080]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
                   </div>
                 </div>
                 {touched.state && errors.state && (
-                  <p className="text-xs text-[#cb3837] mt-1">{errors.state}</p>
+                  <p className="text-xs text-[#ff4444] mt-1">{errors.state}</p>
                 )}
               </div>
             </div>
@@ -906,12 +906,12 @@ export function StepTwoDetails({
             {/* Phone with country code */}
             <div className="mb-4">
               <div className="flex">
-                <div className="flex items-center gap-1 px-3 py-3 border border-r-0 border-[#d1d9e6] rounded-l-lg bg-[#f5f7fa] text-xs text-[#7a8299] whitespace-nowrap">
+                <div className="flex items-center gap-1 px-3 py-3 border border-r-0 border-[#333333] rounded-l-lg bg-[#242424] text-xs text-[#808080] whitespace-nowrap">
                   <span className="hidden sm:inline">{getDialCode()}</span>
                   <span className="sm:hidden">{DIAL_CODES[country] || "+1"}</span>
                 </div>
                 <div className="relative flex-1">
-                  <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7a8299]" />
+                  <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#808080]" />
                   <input
                     type="tel"
                     value={phone}
@@ -926,21 +926,21 @@ export function StepTwoDetails({
                             ? "0412 345 678"
                             : "Phone number"
                     }
-                    className={`w-full pl-10 pr-4 py-3 border rounded-r-lg text-[#2c3345] text-sm bg-[#f5f7fa] placeholder:text-[#7a8299] focus:outline-none focus:border-[#52b4f9] focus:ring-2 focus:ring-[#52b4f9]/20 transition-all ${
-                      touched.phone && errors.phone ? "border-[#cb3837]" : "border-[#d1d9e6]"
+                    className={`w-full pl-10 pr-4 py-3 border rounded-r-lg text-white text-sm bg-[#242424] placeholder:text-[#808080] focus:outline-none focus:border-[#f8231b] focus:ring-2 focus:ring-[#f8231b]/20 transition-all ${
+                      touched.phone && errors.phone ? "border-[#ff4444]" : "border-[#333333]"
                     }`}
                   />
                 </div>
               </div>
               {touched.phone && errors.phone && (
-                <p className="text-xs text-[#cb3837] mt-1">{errors.phone}</p>
+                <p className="text-xs text-[#ff4444] mt-1">{errors.phone}</p>
               )}
             </div>
 
             {/* Date of Birth */}
             <div className="mb-4">
               <div className="relative">
-                <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7a8299]" />
+                <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#808080]" />
                 <input
                   type="text"
                   value={dateOfBirth}
@@ -952,13 +952,13 @@ export function StepTwoDetails({
                 />
               </div>
               {touched.dateOfBirth && errors.dateOfBirth && (
-                <p className="text-xs text-[#cb3837] mt-1">{errors.dateOfBirth}</p>
+                <p className="text-xs text-[#ff4444] mt-1">{errors.dateOfBirth}</p>
               )}
             </div>
 
             {/* Submit Error */}
             {submitError && (
-              <p className="text-[#cb3837] text-sm mb-3">{submitError}</p>
+              <p className="text-[#ff4444] text-sm mb-3">{submitError}</p>
             )}
 
             {/* Continue Button */}
@@ -966,7 +966,7 @@ export function StepTwoDetails({
               type="button"
               onClick={handleContinue}
               disabled={isSubmitting}
-              className="w-full py-3.5 rounded-xl text-base font-semibold bg-[#52b4f9] text-white hover:bg-[#3a9fe0] disabled:bg-[#b8c4d4] disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+              className="w-full py-3.5 rounded-xl text-base font-semibold bg-[#f8231b] text-white hover:bg-[#d91e17] disabled:bg-[#4a4a4a] disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
             >
               {isSubmitting ? (
                 <>
@@ -986,7 +986,7 @@ export function StepTwoDetails({
               type="button"
               onClick={onBack}
               disabled={isSubmitting}
-              className="w-full mt-3 py-2 text-sm text-[#7a8299] hover:text-[#2c3345] disabled:opacity-50 transition-colors"
+              className="w-full mt-3 py-2 text-sm text-[#808080] hover:text-white disabled:opacity-50 transition-colors"
             >
               Go Back
             </button>

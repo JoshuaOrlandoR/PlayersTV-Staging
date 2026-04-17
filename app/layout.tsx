@@ -39,7 +39,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="bg-[#0a0a0a]">
       <head>
         {/* Google Tag Manager */}
         <Script
@@ -54,7 +54,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           }}
         />
       </head>
-      <body className={`${nunito.variable} font-sans antialiased`}>
+      <body className={`${nunito.variable} font-sans antialiased bg-[#0a0a0a]`}>
         {/* Google Tag Manager (noscript) */}
         <noscript>
           <iframe

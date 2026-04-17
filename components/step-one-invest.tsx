@@ -226,12 +226,12 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
     <div className="min-h-screen flex items-start justify-center px-3 pb-24 md:px-4 md:pb-4 bg-transparent">
       <div className="w-full max-w-[600px]">
         {/* Main Card */}
-        <div className="bg-white rounded-xl border-2 border-[#147bc3] p-4 md:p-6 lg:p-8">
+        <div className="bg-[#181818] rounded-xl border-2 border-[#f8231b] p-4 md:p-6 lg:p-8">
           {/* Timeline */}
           <StepTimeline currentStep={1} />
 
           {/* Title */}
-          <h1 className="text-2xl md:text-[1.75rem] font-bold text-center text-black mb-6 leading-tight">
+          <h1 className="text-2xl md:text-[1.75rem] font-bold text-center text-white mb-6 leading-tight">
             Begin Your Investment
           </h1>
 
@@ -253,28 +253,28 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
                   }}
                   onBlur={handleEmailBlur}
                   placeholder="Email"
-                  className={`w-full px-4 py-3 text-[0.9375rem] border rounded-lg bg-[#f5f7fa] text-[#2c3345] placeholder-[#7a8299] focus:outline-none focus:border-[#52b4f9] focus:ring-2 focus:ring-[#52b4f9]/20 ${
-                    errors.email ? "border-[#cb3837]" : "border-[#d1d9e6]"
+                  className={`w-full px-4 py-3 text-[0.9375rem] border rounded-lg bg-[#242424] text-white placeholder-[#808080] focus:outline-none focus:border-[#f8231b] focus:ring-2 focus:ring-[#f8231b]/20 ${
+                    errors.email ? "border-[#ff4444]" : "border-[#333333]"
                   }`}
                 />
                 {checkingEmail && (
                   <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                    <div className="w-4 h-4 border-2 border-[#52b4f9] border-t-transparent rounded-full animate-spin" />
+                    <div className="w-4 h-4 border-2 border-[#f8231b] border-t-transparent rounded-full animate-spin" />
                   </div>
                 )}
               </div>
-              {errors.email && <p className="text-[#cb3837] text-xs mt-1">{errors.email}</p>}
+              {errors.email && <p className="text-[#ff4444] text-xs mt-1">{errors.email}</p>}
               
               {/* Existing investments banner */}
               {showExistingBanner && existingInvestments.length > 0 && (
-                <div className="mt-2 p-3 bg-[#e8f4fd] border border-[#52b4f9] rounded-lg flex items-center justify-between gap-3">
-                  <p className="text-xs text-[#2c3345]">
+                <div className="mt-2 p-3 bg-[#2a1515] border border-[#f8231b] rounded-lg flex items-center justify-between gap-3">
+                  <p className="text-xs text-white">
                     Found {existingInvestments.length} existing investment{existingInvestments.length > 1 ? "s" : ""}
                   </p>
                   <button
                     type="button"
                     onClick={() => setShowExistingModal(true)}
-                    className="text-xs font-semibold text-[#52b4f9] hover:underline whitespace-nowrap"
+                    className="text-xs font-semibold text-[#f8231b] hover:underline whitespace-nowrap"
                   >
                     View
                   </button>
@@ -292,11 +292,11 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
                   clearError("firstName")
                 }}
                 placeholder="First Name"
-                className={`w-full px-4 py-3 text-[0.9375rem] border rounded-lg bg-[#f5f7fa] text-[#2c3345] placeholder-[#7a8299] focus:outline-none focus:border-[#52b4f9] focus:ring-2 focus:ring-[#52b4f9]/20 ${
-                  errors.firstName ? "border-[#cb3837]" : "border-[#d1d9e6]"
+                className={`w-full px-4 py-3 text-[0.9375rem] border rounded-lg bg-[#242424] text-white placeholder-[#808080] focus:outline-none focus:border-[#f8231b] focus:ring-2 focus:ring-[#f8231b]/20 ${
+                  errors.firstName ? "border-[#ff4444]" : "border-[#333333]"
                 }`}
               />
-              {errors.firstName && <p className="text-[#cb3837] text-xs mt-1">{errors.firstName}</p>}
+              {errors.firstName && <p className="text-[#ff4444] text-xs mt-1">{errors.firstName}</p>}
             </div>
 
             {/* Last Name */}
@@ -309,11 +309,11 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
                   clearError("lastName")
                 }}
                 placeholder="Last Name"
-                className={`w-full px-4 py-3 text-[0.9375rem] border rounded-lg bg-[#f5f7fa] text-[#2c3345] placeholder-[#7a8299] focus:outline-none focus:border-[#52b4f9] focus:ring-2 focus:ring-[#52b4f9]/20 ${
-                  errors.lastName ? "border-[#cb3837]" : "border-[#d1d9e6]"
+                className={`w-full px-4 py-3 text-[0.9375rem] border rounded-lg bg-[#242424] text-white placeholder-[#808080] focus:outline-none focus:border-[#f8231b] focus:ring-2 focus:ring-[#f8231b]/20 ${
+                  errors.lastName ? "border-[#ff4444]" : "border-[#333333]"
                 }`}
               />
-              {errors.lastName && <p className="text-[#cb3837] text-xs mt-1">{errors.lastName}</p>}
+              {errors.lastName && <p className="text-[#ff4444] text-xs mt-1">{errors.lastName}</p>}
             </div>
 
             {/* Phone */}
@@ -326,42 +326,42 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
                   clearError("phone")
                 }}
                 placeholder="Phone number"
-                className={`w-full px-4 py-3 text-[0.9375rem] border rounded-lg bg-[#f5f7fa] text-[#2c3345] placeholder-[#7a8299] focus:outline-none focus:border-[#52b4f9] focus:ring-2 focus:ring-[#52b4f9]/20 ${
-                  errors.phone ? "border-[#cb3837]" : "border-[#d1d9e6]"
+                className={`w-full px-4 py-3 text-[0.9375rem] border rounded-lg bg-[#242424] text-white placeholder-[#808080] focus:outline-none focus:border-[#f8231b] focus:ring-2 focus:ring-[#f8231b]/20 ${
+                  errors.phone ? "border-[#ff4444]" : "border-[#333333]"
                 }`}
               />
-              {errors.phone && <p className="text-[#cb3837] text-xs mt-1">{errors.phone}</p>}
+              {errors.phone && <p className="text-[#ff4444] text-xs mt-1">{errors.phone}</p>}
             </div>
           </div>
 
           {/* Investment Section Title */}
-          <h2 className="text-lg font-semibold text-center text-[#2c3345] mb-2">
+          <h2 className="text-lg font-semibold text-center text-white mb-2">
             How much would you like to invest?
           </h2>
 
           {/* Min Investment & Share Price */}
-          <div className="flex flex-col sm:flex-row sm:justify-between text-sm text-[#7a8299] mb-4 gap-1 sm:gap-0 text-center sm:text-left">
+          <div className="flex flex-col sm:flex-row sm:justify-between text-sm text-[#808080] mb-4 gap-1 sm:gap-0 text-center sm:text-left">
             <span>Min. investment {formatCurrency(config.minInvestment, 2)}</span>
             <span>Share price {formatCurrency(config.sharePrice, 2)}</span>
           </div>
 
           {/* Share Counter Box - only show when amount is selected (not -1 placeholder) */}
           {/* min-h ensures consistent height to prevent layout shift on mobile */}
-          <div className="bg-[#f0f4f8] rounded-lg p-3 md:p-4 mb-5 text-center min-h-[72px] md:min-h-[80px] flex items-center justify-center">
+          <div className="bg-[#242424] rounded-lg p-3 md:p-4 mb-5 text-center min-h-[72px] md:min-h-[80px] flex items-center justify-center">
             {amount > 0 ? (
               <div className="flex items-center justify-center gap-2 md:gap-3">
                 <div>
-                  <span className="text-xl md:text-2xl font-bold text-[#52b4f9]">{formatNumber(calculation.baseShares)}</span>
-                  <p className="text-sm md:text-base text-[#7a8299]">Shares of iotty</p>
+                  <span className="text-xl md:text-2xl font-bold text-[#f8231b]">{formatNumber(calculation.baseShares)}</span>
+                  <p className="text-sm md:text-base text-[#808080]">Shares</p>
                 </div>
-                <span className="text-lg md:text-xl text-[#7a8299]">+</span>
+                <span className="text-lg md:text-xl text-[#808080]">+</span>
                 <div>
-                  <span className="text-xl md:text-2xl font-bold text-[#52b4f9]">{formatCurrency(calculation.bonusShares * config.sharePrice, 0)}</span>
-                  <p className="text-sm md:text-base text-[#52b4f9]">Free Shares</p>
+                  <span className="text-xl md:text-2xl font-bold text-[#f8231b]">{formatCurrency(calculation.bonusShares * config.sharePrice, 0)}</span>
+                  <p className="text-sm md:text-base text-[#f8231b]">Free Shares</p>
                 </div>
               </div>
             ) : (
-              <p className="text-sm text-[#7a8299]">Select an investment amount to see your shares</p>
+              <p className="text-sm text-[#808080]">Select an investment amount to see your shares</p>
             )}
           </div>
 
@@ -379,8 +379,8 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
                   onClick={() => handlePresetClick(preset)}
                   className={`w-full py-3 px-3 md:px-4 rounded-lg text-left transition-all border ${
                     isSelected
-                      ? "bg-[#f0f7ff] border-[#52b4f9]"
-                      : "bg-white border-[#d1d9e6] hover:border-[#52b4f9]"
+                      ? "bg-[#2a1515] border-[#f8231b]"
+                      : "bg-[#242424] border-[#333333] hover:border-[#f8231b]"
                   }`}
                 >
                   <div className="flex items-center justify-between gap-2">
@@ -388,16 +388,16 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
                     <div className="flex items-center gap-2 md:gap-3 flex-shrink-0">
                       <div
                         className={`w-4 h-4 md:w-5 md:h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
-                          isSelected ? "border-[#52b4f9]" : "border-[#d1d9e6]"
+                          isSelected ? "border-[#f8231b]" : "border-[#444444]"
                         }`}
                       >
-                        {isSelected && <div className="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-[#52b4f9]" />}
+                        {isSelected && <div className="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-[#f8231b]" />}
                       </div>
                       <div>
-                        <div className="text-xs md:text-sm lg:text-base font-semibold text-[#2c3345]">
+                        <div className="text-xs md:text-sm lg:text-base font-semibold text-white">
                           Invest {formatCurrency(preset, 0)}
                         </div>
-                        <div className="text-[0.625rem] md:text-[0.6875rem] text-[#7a8299]">
+                        <div className="text-[0.625rem] md:text-[0.6875rem] text-[#808080]">
                           {formatNumber(presetCalc.baseShares)} Shares
                         </div>
                       </div>
@@ -406,11 +406,11 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
                     {/* Right side: Bonus pills */}
                     {hasBonus && (
                       <div className="flex items-center gap-1 md:gap-2 flex-shrink-0">
-                        <span className="text-[0.6875rem] md:text-sm font-bold py-1 px-4 md:py-2 md:px-6 rounded-md md:rounded-lg bg-[#52b4f9] text-white text-center min-w-[78px] md:min-w-[115px]">
+                        <span className="text-[0.6875rem] md:text-sm font-bold py-1 px-4 md:py-2 md:px-6 rounded-md md:rounded-lg bg-[#8a0000] text-white text-center min-w-[78px] md:min-w-[115px]">
                           +{formatCurrency(presetCalc.bonusShares * config.sharePrice, 0)}<br />
                           <span className="text-[0.5625rem] md:text-xs font-medium">Free Shares</span>
                         </span>
-                        <span className="text-[0.6875rem] md:text-sm font-bold py-1 px-4 md:py-2 md:px-6 rounded-md md:rounded-lg bg-[#52b4f9] text-white text-center min-w-[62px] md:min-w-[90px]">
+                        <span className="text-[0.6875rem] md:text-sm font-bold py-1 px-4 md:py-2 md:px-6 rounded-md md:rounded-lg bg-[#8a0000] text-white text-center min-w-[62px] md:min-w-[90px]">
                           {presetCalc.bonusPercent.toFixed(0)}%<br />
                           <span className="text-[0.5625rem] md:text-xs font-medium">Bonus</span>
                         </span>
@@ -424,19 +424,19 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
 
           {/* Custom Amount Input */}
           <div className="mb-6">
-            <div className="flex items-center gap-2 px-4 py-3 border border-[#d1d9e6] rounded-lg bg-[#f5f7fa] focus-within:border-[#52b4f9] focus-within:ring-2 focus-within:ring-[#52b4f9]/20">
-              <span className="text-[#7a8299] text-sm">Amount: $</span>
+            <div className="flex items-center gap-2 px-4 py-3 border border-[#333333] rounded-lg bg-[#242424] focus-within:border-[#f8231b] focus-within:ring-2 focus-within:ring-[#f8231b]/20">
+              <span className="text-[#808080] text-sm">Amount: $</span>
               <input
                 type="text"
                 inputMode="decimal"
                 value={customAmount}
                 onChange={(e) => handleCustomAmountChange(e.target.value)}
                 placeholder="Enter custom amount"
-                className="flex-1 bg-transparent text-[0.9375rem] text-[#2c3345] placeholder-[#7a8299] focus:outline-none"
+                className="flex-1 bg-transparent text-[0.9375rem] text-white placeholder-[#808080] focus:outline-none"
               />
             </div>
             {!isAboveMin && amount > 0 && (
-              <p className="text-[#cb3837] text-xs mt-1">
+              <p className="text-[#ff4444] text-xs mt-1">
                 Minimum investment is {formatCurrency(config.minInvestment, 2)}
               </p>
             )}
@@ -444,10 +444,10 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
 
           {/* Error Messages */}
           {errors.amount && (
-            <p className="text-[#cb3837] text-sm mb-3">{errors.amount}</p>
+            <p className="text-[#ff4444] text-sm mb-3">{errors.amount}</p>
           )}
           {submitError && (
-            <p className="text-[#cb3837] text-sm mb-3">{submitError}</p>
+            <p className="text-[#ff4444] text-sm mb-3">{submitError}</p>
           )}
 
 
@@ -457,13 +457,13 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
             type="button"
             onClick={handleContinueClick}
             disabled={!isFormValid}
-            className="w-full py-3.5 rounded-lg text-[0.9375rem] font-semibold bg-[#52b4f9] text-white hover:bg-[#3a9fe0] disabled:bg-[#b8c4d4] disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+            className="w-full py-3.5 rounded-lg text-[0.9375rem] font-semibold bg-[#f8231b] text-white hover:bg-[#d91e17] disabled:bg-[#4a4a4a] disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
           >
             Continue <span>&rarr;</span>
           </button>
 
           {/* Disclaimer */}
-          <p className="text-[0.6875rem] text-[#7a8299] text-center mt-4 leading-relaxed">
+          <p className="text-[0.6875rem] text-[#808080] text-center mt-4 leading-relaxed">
             By beginning the investment process, you consent to receive communications via email or SMS regarding updates to this offer, and may unsubscribe from non-transactional emails at any time.
           </p>
         </div>
@@ -471,20 +471,20 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
 
       {/* Existing Investments Modal */}
       {showExistingModal && existingInvestments.length > 0 && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-xl w-full max-w-md p-5 shadow-xl">
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50">
+          <div className="bg-[#181818] border border-[#f8231b] rounded-xl w-full max-w-md p-5 shadow-xl">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-[#2c3345]">Existing Investments</h3>
+              <h3 className="text-lg font-semibold text-white">Existing Investments</h3>
               <button
                 type="button"
                 onClick={() => setShowExistingModal(false)}
-                className="text-[#7a8299] hover:text-[#2c3345] text-xl leading-none"
+                className="text-[#808080] hover:text-white text-xl leading-none"
               >
                 &times;
               </button>
             </div>
             
-            <p className="text-sm text-[#7a8299] mb-4">
+            <p className="text-sm text-[#808080] mb-4">
               We found verified investments for {email}. Click one to resume where you left off, or close to start a new investment.
             </p>
 
@@ -495,10 +495,10 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
                   type="button"
                   onClick={() => handleResumeSelect(inv.id)}
                   disabled={resumeRedirecting !== null}
-                  className="w-full p-4 border border-[#d1d9e6] rounded-lg text-left bg-[#f5f7fa] hover:border-[#52b4f9] hover:bg-[#f0f7ff] transition-colors disabled:opacity-50"
+                  className="w-full p-4 border border-[#333333] rounded-lg text-left bg-[#242424] hover:border-[#f8231b] hover:bg-[#2a1515] transition-colors disabled:opacity-50"
                 >
                   <div className="flex justify-between items-start mb-1">
-                    <span className="text-base font-semibold text-[#2c3345]">
+                    <span className="text-base font-semibold text-white">
                       ${inv.amount?.toLocaleString() || "—"}
                     </span>
                     <span className={`text-xs px-2 py-0.5 rounded capitalize ${
@@ -506,24 +506,24 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
                         ? "bg-[#22c55e] text-white" 
                         : inv.state?.toLowerCase() === "waiting"
                         ? "bg-[#f59e0b] text-white"
-                        : "bg-[#52b4f9] text-white"
+                        : "bg-[#f8231b] text-white"
                     }`}>
                       {inv.state === "signed" ? "Documents Signed" : inv.state === "waiting" ? "Awaiting Payment" : inv.state}
                     </span>
                   </div>
                   {(inv.first_name || inv.last_name) && (
-                    <p className="text-sm text-[#7a8299]">
+                    <p className="text-sm text-[#808080]">
                       {inv.first_name} {inv.last_name}
                     </p>
                   )}
                   {inv.shares > 0 && (
-                    <p className="text-xs text-[#7a8299] mt-1">
+                    <p className="text-xs text-[#808080] mt-1">
                       {formatNumber(inv.shares)} shares
                     </p>
                   )}
                   {resumeRedirecting === inv.id && (
-                    <p className="text-xs text-[#52b4f9] mt-2 flex items-center gap-2">
-                      <span className="w-3 h-3 border-2 border-[#52b4f9] border-t-transparent rounded-full animate-spin" />
+                    <p className="text-xs text-[#f8231b] mt-2 flex items-center gap-2">
+                      <span className="w-3 h-3 border-2 border-[#f8231b] border-t-transparent rounded-full animate-spin" />
                       Redirecting to checkout...
                     </p>
                   )}
@@ -531,11 +531,11 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
               ))}
             </div>
 
-            <div className="mt-4 pt-4 border-t border-[#e2e8f0]">
+            <div className="mt-4 pt-4 border-t border-[#333333]">
               <button
                 type="button"
                 onClick={() => setShowExistingModal(false)}
-                className="w-full py-2.5 rounded-lg text-sm font-medium text-[#52b4f9] hover:bg-[#f0f7ff] transition-colors"
+                className="w-full py-2.5 rounded-lg text-sm font-medium text-[#f8231b] hover:bg-[#2a1515] transition-colors"
               >
                 Close and start a new investment
               </button>

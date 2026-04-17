@@ -27,17 +27,17 @@ export function StepTimeline({ currentStep }: StepTimelineProps) {
               <div
                 className={`w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center text-xs md:text-sm font-semibold transition-all ${
                   isCompleted
-                    ? "bg-[#52b4f9] text-white"
+                    ? "bg-[#f8231b] text-white"
                     : isActive
-                    ? "bg-white border-2 border-[#52b4f9] text-[#52b4f9]"
-                    : "bg-white border-2 border-[#d1d9e6] text-[#7a8299]"
+                    ? "bg-[#181818] border-2 border-[#f8231b] text-[#f8231b]"
+                    : "bg-[#181818] border-2 border-[#444444] text-[#808080]"
                 }`}
               >
                 {isCompleted ? <Check className="w-4 h-4 md:w-5 md:h-5" /> : step.number}
               </div>
               <span
                 className={`text-[0.625rem] md:text-xs mt-1 md:mt-1.5 font-medium ${
-                  isActive ? "text-[#2c3345]" : isCompleted ? "text-[#52b4f9]" : "text-[#7a8299]"
+                  isActive ? "text-white" : isCompleted ? "text-[#f8231b]" : "text-[#808080]"
                 }`}
               >
                 {step.label}
@@ -49,7 +49,7 @@ export function StepTimeline({ currentStep }: StepTimelineProps) {
               <div className="flex-1 mx-1 md:mx-2">
                 <div
                   className={`h-0.5 w-full transition-colors ${
-                    isCompleted ? "bg-[#52b4f9]" : "bg-[#d1d9e6]"
+                    isCompleted ? "bg-[#f8231b]" : "bg-[#444444]"
                   }`}
                 />
               </div>
