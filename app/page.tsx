@@ -76,7 +76,7 @@ export default function InvestmentPage() {
 
   if (!configLoaded) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#0a0a0a]">
+      <div className="min-h-screen flex items-center justify-center bg-transparent">
         <div className="text-center">
           <div className="w-8 h-8 border-3 border-[#f8231b] border-t-transparent rounded-full animate-spin mx-auto mb-3" />
           <p className="text-sm text-[#808080]">Loading deal information...</p>
