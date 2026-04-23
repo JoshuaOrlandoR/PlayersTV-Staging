@@ -29,7 +29,7 @@ export async function GET() {
       campaignGoal: deal.funding_goal_cents / 100,
       investorsCount: deal.investors_count,
       investorFeePercent: FALLBACK_CONFIG.investorFeePercent,
-      presetAmounts: [2500, 5000, 10000, 25000, 50000, 100000, 250000].map(
+      presetAmounts: [1000, 2500, 5000, 10000, 25000].map(
         (amt) => alignToSharePrice(amt, deal.price_per_security)
       ),
       volumeTiers: tiers.length > 0
