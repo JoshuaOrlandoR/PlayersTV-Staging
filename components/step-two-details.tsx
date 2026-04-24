@@ -621,17 +621,17 @@ export function StepTwoDetails({
   }
 
   const inputClass = (field: string) => 
-    `w-full pl-10 pr-4 py-3 border rounded-lg text-white text-sm bg-[#242424] placeholder:text-[#808080] focus:outline-none focus:border-[#f8231b] focus:ring-2 focus:ring-[#f8231b]/20 transition-all ${
+    `w-full pl-10 pr-4 py-3.5 border rounded-lg text-white text-base bg-[#242424] placeholder:text-[#808080] focus:outline-none focus:border-[#f8231b] focus:ring-2 focus:ring-[#f8231b]/20 transition-all ${
       touched[field] && errors[field] ? "border-[#ff4444]" : "border-[#333333]"
     }`
 
   const inputClassNoIcon = (field: string) => 
-    `w-full px-4 py-3 border rounded-lg text-white text-sm bg-[#242424] placeholder:text-[#808080] focus:outline-none focus:border-[#f8231b] focus:ring-2 focus:ring-[#f8231b]/20 transition-all ${
+    `w-full px-4 py-3.5 border rounded-lg text-white text-base bg-[#242424] placeholder:text-[#808080] focus:outline-none focus:border-[#f8231b] focus:ring-2 focus:ring-[#f8231b]/20 transition-all ${
       touched[field] && errors[field] ? "border-[#ff4444]" : "border-[#333333]"
     }`
 
   const selectClass = (field: string) =>
-    `w-full px-4 py-3 border rounded-lg text-white text-sm bg-[#242424] focus:outline-none focus:border-[#f8231b] focus:ring-2 focus:ring-[#f8231b]/20 transition-all appearance-none cursor-pointer ${
+    `w-full px-4 py-3.5 border rounded-lg text-white text-base bg-[#242424] focus:outline-none focus:border-[#f8231b] focus:ring-2 focus:ring-[#f8231b]/20 transition-all appearance-none cursor-pointer ${
       touched[field] && errors[field] ? "border-[#ff4444]" : "border-[#333333]"
     }`
 
@@ -669,7 +669,7 @@ export function StepTwoDetails({
             {/* Investor Type */}
             <div className="mb-4 mt-4">
               <div className="flex items-center gap-1 mb-2">
-                <label className="text-sm text-[#808080]">Who is making the investment?</label>
+                <label className="text-[0.9375rem] text-[#808080]">Who is making the investment?</label>
                 <HelpCircle className="w-4 h-4 text-[#808080]" />
               </div>
               <div className="relative">
@@ -855,7 +855,7 @@ export function StepTwoDetails({
             {/* Country & State Row */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
               <div>
-                <label className="text-[0.625rem] text-[#808080] mb-1 block uppercase tracking-wide">Country</label>
+                <label className="text-xs text-[#808080] mb-1 block uppercase tracking-wide">Country</label>
                 <div className="relative">
                   <select
                     value={country}
@@ -877,7 +877,7 @@ export function StepTwoDetails({
                 </div>
               </div>
               <div>
-                <label className="text-[0.625rem] text-[#808080] mb-1 block uppercase tracking-wide">State / Province</label>
+                <label className="text-xs text-[#808080] mb-1 block uppercase tracking-wide">State / Province</label>
                 <div className="relative">
                   <select
                     value={state}
@@ -906,7 +906,7 @@ export function StepTwoDetails({
             {/* Phone with country code */}
             <div className="mb-4">
               <div className="flex">
-                <div className="flex items-center gap-1 px-3 py-3 border border-r-0 border-[#333333] rounded-l-lg bg-[#242424] text-xs text-[#808080] whitespace-nowrap">
+                <div className="flex items-center gap-1 px-3 py-3.5 border border-r-0 border-[#333333] rounded-l-lg bg-[#242424] text-sm text-[#808080] whitespace-nowrap">
                   <span className="hidden sm:inline">{getDialCode()}</span>
                   <span className="sm:hidden">{DIAL_CODES[country] || "+1"}</span>
                 </div>
@@ -926,7 +926,7 @@ export function StepTwoDetails({
                             ? "0412 345 678"
                             : "Phone number"
                     }
-                    className={`w-full pl-10 pr-4 py-3 border rounded-r-lg text-white text-sm bg-[#242424] placeholder:text-[#808080] focus:outline-none focus:border-[#f8231b] focus:ring-2 focus:ring-[#f8231b]/20 transition-all ${
+                    className={`w-full pl-10 pr-4 py-3.5 border rounded-r-lg text-white text-base bg-[#242424] placeholder:text-[#808080] focus:outline-none focus:border-[#f8231b] focus:ring-2 focus:ring-[#f8231b]/20 transition-all ${
                       touched.phone && errors.phone ? "border-[#ff4444]" : "border-[#333333]"
                     }`}
                   />
@@ -966,7 +966,7 @@ export function StepTwoDetails({
               type="button"
               onClick={handleContinue}
               disabled={isSubmitting}
-              className="w-full py-3.5 rounded-xl text-base font-semibold bg-[#f8231b] text-white hover:bg-[#d91e17] disabled:bg-[#4a4a4a] disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+              className="w-full py-4 rounded-xl text-base font-semibold bg-[#f8231b] text-white hover:bg-[#d91e17] disabled:bg-[#4a4a4a] disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
             >
               {isSubmitting ? (
                 <>
@@ -986,7 +986,7 @@ export function StepTwoDetails({
               type="button"
               onClick={onBack}
               disabled={isSubmitting}
-              className="w-full mt-3 py-2 text-sm text-[#808080] hover:text-white disabled:opacity-50 transition-colors"
+              className="w-full mt-3 py-2 text-[0.9375rem] text-[#808080] hover:text-white disabled:opacity-50 transition-colors"
             >
               Go Back
             </button>

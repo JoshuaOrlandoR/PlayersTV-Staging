@@ -231,7 +231,7 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
           <StepTimeline currentStep={1} />
 
           {/* Title */}
-          <h1 className="text-2xl md:text-[1.75rem] font-bold text-center text-white mb-6 leading-tight">
+          <h1 className="text-[1.625rem] md:text-[2rem] font-bold text-center text-white mb-6 leading-tight">
             Begin Your Investment
           </h1>
 
@@ -253,7 +253,7 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
                   }}
                   onBlur={handleEmailBlur}
                   placeholder="Email"
-                  className={`w-full px-4 py-3 text-[0.9375rem] border rounded-lg bg-[#242424] text-white placeholder-[#808080] focus:outline-none focus:border-[#f8231b] focus:ring-2 focus:ring-[#f8231b]/20 ${
+                  className={`w-full px-4 py-3.5 text-base border rounded-lg bg-[#242424] text-white placeholder-[#808080] focus:outline-none focus:border-[#f8231b] focus:ring-2 focus:ring-[#f8231b]/20 ${
                     errors.email ? "border-[#ff4444]" : "border-[#333333]"
                   }`}
                 />
@@ -292,7 +292,7 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
                   clearError("firstName")
                 }}
                 placeholder="First Name"
-                className={`w-full px-4 py-3 text-[0.9375rem] border rounded-lg bg-[#242424] text-white placeholder-[#808080] focus:outline-none focus:border-[#f8231b] focus:ring-2 focus:ring-[#f8231b]/20 ${
+                className={`w-full px-4 py-3.5 text-base border rounded-lg bg-[#242424] text-white placeholder-[#808080] focus:outline-none focus:border-[#f8231b] focus:ring-2 focus:ring-[#f8231b]/20 ${
                   errors.firstName ? "border-[#ff4444]" : "border-[#333333]"
                 }`}
               />
@@ -309,7 +309,7 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
                   clearError("lastName")
                 }}
                 placeholder="Last Name"
-                className={`w-full px-4 py-3 text-[0.9375rem] border rounded-lg bg-[#242424] text-white placeholder-[#808080] focus:outline-none focus:border-[#f8231b] focus:ring-2 focus:ring-[#f8231b]/20 ${
+                className={`w-full px-4 py-3.5 text-base border rounded-lg bg-[#242424] text-white placeholder-[#808080] focus:outline-none focus:border-[#f8231b] focus:ring-2 focus:ring-[#f8231b]/20 ${
                   errors.lastName ? "border-[#ff4444]" : "border-[#333333]"
                 }`}
               />
@@ -326,7 +326,7 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
                   clearError("phone")
                 }}
                 placeholder="Phone number"
-                className={`w-full px-4 py-3 text-[0.9375rem] border rounded-lg bg-[#242424] text-white placeholder-[#808080] focus:outline-none focus:border-[#f8231b] focus:ring-2 focus:ring-[#f8231b]/20 ${
+                className={`w-full px-4 py-3.5 text-base border rounded-lg bg-[#242424] text-white placeholder-[#808080] focus:outline-none focus:border-[#f8231b] focus:ring-2 focus:ring-[#f8231b]/20 ${
                   errors.phone ? "border-[#ff4444]" : "border-[#333333]"
                 }`}
               />
@@ -335,12 +335,12 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
           </div>
 
           {/* Investment Section Title */}
-          <h2 className="text-lg font-semibold text-center text-white mb-2">
+          <h2 className="text-xl md:text-[1.375rem] font-semibold text-center text-white mb-2">
             How much would you like to invest?
           </h2>
 
           {/* Min Investment & Share Price */}
-          <div className="flex flex-col sm:flex-row sm:justify-between text-sm text-[#808080] mb-4 gap-1 sm:gap-0 text-center sm:text-left">
+          <div className="flex flex-col sm:flex-row sm:justify-between text-[0.9375rem] text-[#808080] mb-4 gap-1 sm:gap-0 text-center sm:text-left">
             <span>Min. investment {formatCurrency(config.minInvestment, 2)}</span>
             <span>Share price {formatCurrency(config.sharePrice, 2)}</span>
           </div>
@@ -377,7 +377,7 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
                   key={preset}
                   type="button"
                   onClick={() => handlePresetClick(preset)}
-                  className={`w-full py-3 px-3 md:px-4 rounded-lg text-left transition-all border ${
+                  className={`w-full py-4 px-4 md:px-5 rounded-lg text-left transition-all border ${
                     isSelected
                       ? "bg-[#2a1515] border-[#f8231b]"
                       : "bg-[#242424] border-[#333333] hover:border-[#f8231b]"
@@ -385,19 +385,19 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
                 >
                   <div className="flex items-center justify-between gap-2">
                     {/* Left side: Radio + Amount + Shares */}
-                    <div className="flex items-center gap-2 md:gap-3 flex-shrink-0">
+                    <div className="flex items-center gap-3 md:gap-4 flex-shrink-0">
                       <div
-                        className={`w-4 h-4 md:w-5 md:h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
+                        className={`w-5 h-5 md:w-6 md:h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
                           isSelected ? "border-[#f8231b]" : "border-[#444444]"
                         }`}
                       >
-                        {isSelected && <div className="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-[#f8231b]" />}
+                        {isSelected && <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-[#f8231b]" />}
                       </div>
                       <div>
-                        <div className="text-xs md:text-sm lg:text-base font-semibold text-white">
+                        <div className="text-sm md:text-base lg:text-lg font-semibold text-white">
                           Invest {formatCurrency(preset, 0)}
                         </div>
-                        <div className="text-[0.625rem] md:text-[0.6875rem] text-[#808080]">
+                        <div className="text-xs md:text-sm text-[#808080]">
                           {formatNumber(presetCalc.baseShares)} Shares
                         </div>
                       </div>
@@ -405,14 +405,14 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
 
                     {/* Right side: Bonus pills */}
                     {hasBonus && (
-                      <div className="flex items-center gap-1 md:gap-2 flex-shrink-0">
-                        <span className="text-[0.6875rem] md:text-sm font-bold py-1 px-4 md:py-2 md:px-6 rounded-md md:rounded-lg bg-[#8a0000] text-white text-center min-w-[78px] md:min-w-[115px]">
+                      <div className="flex items-center gap-1.5 md:gap-2 flex-shrink-0">
+                        <span className="text-xs md:text-[0.9375rem] font-bold py-1.5 px-4 md:py-2.5 md:px-6 rounded-md md:rounded-lg bg-[#8a0000] text-white text-center min-w-[80px] md:min-w-[120px]">
                           +{formatCurrency(presetCalc.bonusShares * config.sharePrice, 0)}<br />
-                          <span className="text-[0.5625rem] md:text-xs font-medium">Free Shares</span>
+                          <span className="text-[0.625rem] md:text-xs font-medium">Free Shares</span>
                         </span>
-                        <span className="text-[0.6875rem] md:text-sm font-bold py-1 px-4 md:py-2 md:px-6 rounded-md md:rounded-lg bg-[#8a0000] text-white text-center min-w-[62px] md:min-w-[90px]">
+                        <span className="text-xs md:text-[0.9375rem] font-bold py-1.5 px-4 md:py-2.5 md:px-6 rounded-md md:rounded-lg bg-[#8a0000] text-white text-center min-w-[64px] md:min-w-[95px]">
                           {presetCalc.bonusPercent.toFixed(0)}%<br />
-                          <span className="text-[0.5625rem] md:text-xs font-medium">Bonus</span>
+                          <span className="text-[0.625rem] md:text-xs font-medium">Bonus</span>
                         </span>
                       </div>
                     )}
@@ -424,15 +424,15 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
 
           {/* Custom Amount Input */}
           <div className="mb-6">
-            <div className="flex items-center gap-2 px-4 py-3 border border-[#333333] rounded-lg bg-[#242424] focus-within:border-[#f8231b] focus-within:ring-2 focus-within:ring-[#f8231b]/20">
-              <span className="text-[#808080] text-sm">Amount: $</span>
+            <div className="flex items-center gap-2 px-4 py-3.5 border border-[#333333] rounded-lg bg-[#242424] focus-within:border-[#f8231b] focus-within:ring-2 focus-within:ring-[#f8231b]/20">
+              <span className="text-[#808080] text-[0.9375rem]">Amount: $</span>
               <input
                 type="text"
                 inputMode="decimal"
                 value={customAmount}
                 onChange={(e) => handleCustomAmountChange(e.target.value)}
                 placeholder="Enter custom amount"
-                className="flex-1 bg-transparent text-[0.9375rem] text-white placeholder-[#808080] focus:outline-none"
+                className="flex-1 bg-transparent text-base text-white placeholder-[#808080] focus:outline-none"
               />
             </div>
             {!isAboveMin && amount > 0 && (
@@ -457,13 +457,13 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
             type="button"
             onClick={handleContinueClick}
             disabled={!isFormValid}
-            className="w-full py-3.5 rounded-lg text-[0.9375rem] font-semibold bg-[#f8231b] text-white hover:bg-[#d91e17] disabled:bg-[#4a4a4a] disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+            className="w-full py-4 rounded-lg text-base font-semibold bg-[#f8231b] text-white hover:bg-[#d91e17] disabled:bg-[#4a4a4a] disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
           >
             Continue <span>&rarr;</span>
           </button>
 
           {/* Disclaimer */}
-          <p className="text-[0.6875rem] text-[#808080] text-center mt-4 leading-relaxed">
+          <p className="text-xs text-[#808080] text-center mt-4 leading-relaxed">
             By beginning the investment process, you consent to receive communications via email or SMS regarding updates to this offer, and may unsubscribe from non-transactional emails at any time.
           </p>
         </div>

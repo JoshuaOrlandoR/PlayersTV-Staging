@@ -171,16 +171,16 @@ export function StepThreeReview({ data, config = FALLBACK_CONFIG, onBack, onCont
             <StepTimeline currentStep={3} />
 
             {/* Title */}
-            <h1 className="text-xl md:text-2xl font-bold text-white text-center mt-6 mb-2">
+            <h1 className="text-[1.375rem] md:text-[1.75rem] font-bold text-white text-center mt-6 mb-2">
               Investor Confirmation
             </h1>
-            <p className="text-sm text-[#808080] text-center mb-6">
+            <p className="text-[0.9375rem] text-[#808080] text-center mb-6">
               Please review your details before proceeding.
             </p>
 
             {/* Account Details Section */}
             <div className="mb-6">
-              <h2 className="text-xs font-semibold text-[#808080] uppercase tracking-wide mb-3">
+              <h2 className="text-sm font-semibold text-[#808080] uppercase tracking-wide mb-3">
                 Account Details
               </h2>
               <div className="space-y-3">
@@ -188,28 +188,28 @@ export function StepThreeReview({ data, config = FALLBACK_CONFIG, onBack, onCont
                   <User className="w-4 h-4 text-[#808080] mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="text-xs text-[#808080]">Name</p>
-                    <p className="text-sm font-medium text-white">{data.firstName} {data.lastName}</p>
+                    <p className="text-[0.9375rem] font-medium text-white">{data.firstName} {data.lastName}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <Mail className="w-4 h-4 text-[#808080] mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="text-xs text-[#808080]">Email</p>
-                    <p className="text-sm font-medium text-white">{data.email}</p>
+                    <p className="text-[0.9375rem] font-medium text-white">{data.email}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <Phone className="w-4 h-4 text-[#808080] mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="text-xs text-[#808080]">Phone</p>
-                    <p className="text-sm font-medium text-white">{data.phone}</p>
+                    <p className="text-[0.9375rem] font-medium text-white">{data.phone}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <Building className="w-4 h-4 text-[#808080] mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="text-xs text-[#808080]">Investor Type</p>
-                    <p className="text-sm font-medium text-white">{getInvestorTypeLabel()}</p>
+                    <p className="text-[0.9375rem] font-medium text-white">{getInvestorTypeLabel()}</p>
                   </div>
                 </div>
               </div>
@@ -217,7 +217,7 @@ export function StepThreeReview({ data, config = FALLBACK_CONFIG, onBack, onCont
 
             {/* Personal Information Section */}
             <div className="mb-6">
-              <h2 className="text-xs font-semibold text-[#808080] uppercase tracking-wide mb-3">
+              <h2 className="text-sm font-semibold text-[#808080] uppercase tracking-wide mb-3">
                 Personal Information
               </h2>
               <div className="space-y-3">
@@ -225,28 +225,28 @@ export function StepThreeReview({ data, config = FALLBACK_CONFIG, onBack, onCont
                   <User className="w-4 h-4 text-[#808080] mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="text-xs text-[#808080]">Full Name</p>
-                    <p className="text-sm font-medium text-white">{data.firstName} {data.lastName}</p>
+                    <p className="text-[0.9375rem] font-medium text-white">{data.firstName} {data.lastName}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <MapPin className="w-4 h-4 text-[#808080] mt-0.5 flex-shrink-0" />
                   <div className="min-w-0 flex-1">
                     <p className="text-xs text-[#808080]">Address</p>
-                    <p className="text-sm font-medium text-white break-words">{formatAddress()}</p>
+                    <p className="text-[0.9375rem] font-medium text-white break-words">{formatAddress()}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <Phone className="w-4 h-4 text-[#808080] mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="text-xs text-[#808080]">Phone</p>
-                    <p className="text-sm font-medium text-white">{data.phone}</p>
+                    <p className="text-[0.9375rem] font-medium text-white">{data.phone}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <Calendar className="w-4 h-4 text-[#808080] mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="text-xs text-[#808080]">Date of Birth</p>
-                    <p className="text-sm font-medium text-white">{formatDateOfBirth(data.dateOfBirth)}</p>
+                    <p className="text-[0.9375rem] font-medium text-white">{formatDateOfBirth(data.dateOfBirth)}</p>
                   </div>
                 </div>
               </div>
@@ -254,7 +254,7 @@ export function StepThreeReview({ data, config = FALLBACK_CONFIG, onBack, onCont
 
             {/* Investment Details Section */}
             <div className="mb-6">
-              <h2 className="text-xs font-semibold text-[#808080] uppercase tracking-wide mb-3">
+              <h2 className="text-sm font-semibold text-[#808080] uppercase tracking-wide mb-3">
                 Investment Details
               </h2>
               <div className="space-y-3">
@@ -262,14 +262,14 @@ export function StepThreeReview({ data, config = FALLBACK_CONFIG, onBack, onCont
                   <DollarSign className="w-4 h-4 text-[#808080] mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="text-xs text-[#808080]">Investment Amount</p>
-                    <p className="text-sm font-medium text-white">{formatCurrency(data.investmentAmount, 2)}</p>
+                    <p className="text-[0.9375rem] font-medium text-white">{formatCurrency(data.investmentAmount, 2)}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <BarChart3 className="w-4 h-4 text-[#808080] mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="text-xs text-[#808080]">Shares</p>
-                    <p className="text-sm font-medium text-white">
+                    <p className="text-[0.9375rem] font-medium text-white">
                       {formatNumber(calculation.baseShares)} shares
                       {calculation.bonusShares > 0 && (
                         <span className="text-[#f8231b] ml-1">+ {formatNumber(calculation.bonusShares)} bonus</span>
@@ -285,14 +285,14 @@ export function StepThreeReview({ data, config = FALLBACK_CONFIG, onBack, onCont
                   <BarChart3 className="w-4 h-4 text-[#f8231b] mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="text-xs text-[#808080]">Total Shares</p>
-                    <p className="text-sm font-bold text-white">{formatNumber(totalShares)}</p>
+                    <p className="text-[0.9375rem] font-bold text-white">{formatNumber(totalShares)}</p>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Disclaimer */}
-            <p className="text-xs text-[#808080] text-center mb-4 leading-relaxed">
+            <p className="text-[0.8125rem] text-[#808080] text-center mb-4 leading-relaxed">
               By clicking the button below, your investment details will be submitted to our processing partner. You will then receive instructions via email to complete document signing and payment.
             </p>
 
@@ -308,7 +308,7 @@ export function StepThreeReview({ data, config = FALLBACK_CONFIG, onBack, onCont
               type="button"
               onClick={handleSubmit}
               disabled={isSubmitting}
-              className="w-full py-3.5 rounded-xl text-base font-semibold bg-[#f8231b] text-white hover:bg-[#d91e17] disabled:opacity-60 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+              className="w-full py-4 rounded-xl text-base font-semibold bg-[#f8231b] text-white hover:bg-[#d91e17] disabled:opacity-60 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
             >
               {isSubmitting ? "Processing..." : (
                 <>
@@ -322,7 +322,7 @@ export function StepThreeReview({ data, config = FALLBACK_CONFIG, onBack, onCont
             <button
               type="button"
               onClick={onBack}
-              className="w-full mt-3 py-2 text-sm text-[#808080] hover:text-white transition-colors"
+              className="w-full mt-3 py-2 text-[0.9375rem] text-[#808080] hover:text-white transition-colors"
             >
               Go Back to Edit
             </button>
