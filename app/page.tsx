@@ -44,9 +44,28 @@ export default function InvestmentPage() {
     
     // Also notify parent window in case we're in an iframe
     try {
-      window.parent?.postMessage({ type: 'scrollToTop' }, '*')
+      window.parent?.postMessage({ type: 'scrollToIframe' }, '*')
     } catch {
       // Ignore cross-origin errors
+    }
+  }, [step])
+
+  // Report height to parent iframe for dynamic resizing
+  useEffect(() => {
+    const sendHeight = () => {
+      const height = document.body.scrollHeight
+      window.parent?.postMessage({ type: 'setIframeHeight', height }, '*')
+    }
+    
+    sendHeight()
+    const timeout = setTimeout(sendHeight, 100)
+    
+    const observer = new ResizeObserver(sendHeight)
+    observer.observe(document.body)
+    
+    return () => {
+      clearTimeout(timeout)
+      observer.disconnect()
     }
   }, [step])
 

@@ -658,7 +658,7 @@ export function StepTwoDetails({
   }
 
   return (
-    <div className="min-h-screen flex items-start justify-center px-3 pb-4 md:px-4 md:pb-8 bg-transparent">
+    <div className="min-h-screen flex items-start justify-start pb-4 md:pb-8 bg-transparent">
       <div className="w-full max-w-[600px]">
         {/* Main Card */}
         <div className="bg-[#181818] rounded-xl border-2 border-[#f8231b] overflow-hidden">
