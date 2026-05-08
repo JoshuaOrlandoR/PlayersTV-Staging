@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { StepOneInvest } from "@/components/step-one-invest"
 import { StepTwoDetails } from "@/components/step-two-details"
 import { StepThreeReview, type ReviewData } from "@/components/step-three-review"
@@ -18,6 +18,7 @@ export default function InvestmentPage() {
   const [step, setStep] = useState(1)
   const [config, setConfig] = useState<InvestmentConfig>(FALLBACK_CONFIG)
   const [configLoaded, setConfigLoaded] = useState(false)
+  const isFirstRender = useRef(true)
   const [selectedAmount, setSelectedAmount] = useState(0)
   const [step1Data, setStep1Data] = useState<Step1Data | null>(null)
   const [reviewData, setReviewData] = useState<ReviewData | null>(null)
@@ -37,6 +38,12 @@ export default function InvestmentPage() {
 
   // Scroll to top when step changes (important for mobile and iframe)
   useEffect(() => {
+    // Skip scroll on initial page load
+    if (isFirstRender.current) {
+      isFirstRender.current = false
+      return
+    }
+    
     // Try multiple scroll methods for maximum compatibility
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
     document.documentElement.scrollTop = 0
@@ -68,6 +75,8 @@ export default function InvestmentPage() {
       observer.disconnect()
     }
   }, [step])
+
+  
 
   const handleContinueFromStepOne = (amount: number, data: Step1Data) => {
     setSelectedAmount(amount)

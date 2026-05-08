@@ -5,6 +5,7 @@ import { StepTimeline } from "@/components/step-timeline"
 import {
   FALLBACK_CONFIG,
   calculateInvestment,
+  getNextTierInfo,
   alignToSharePrice,
   formatCurrency,
   formatNumber,
@@ -59,6 +60,10 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
 
   // UTM params
   const [utmParams, setUtmParams] = useState<Record<string, string>>({})
+
+  // === WEBFLOW_UPSELL_MODAL: START ===
+  const [waitingForModal, setWaitingForModal] = useState(false)
+  // === WEBFLOW_UPSELL_MODAL: END ===
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -174,21 +179,68 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
     return Object.keys(newErrors).length === 0
   }
 
-  const handleContinueClick = () => {
-    if (!validateForm()) return
-
+  // === WEBFLOW_UPSELL_MODAL: START ===
+  // Actual continue function that proceeds to step 2
+  const proceedToStep2 = (finalAmount: number) => {
     // Fire dataLayer event
     if (typeof window !== "undefined") {
       (window as Record<string, unknown[]>).dataLayer = (window as Record<string, unknown[]>).dataLayer || []
       ;(window as Record<string, unknown[]>).dataLayer.push({
         event: "step1_complete",
-        investmentAmount: amount,
+        investmentAmount: finalAmount,
         currency: "USD",
       })
     }
 
+    setWaitingForModal(false)
     // Pass data to Step 2 - no API call, profile will be created in Step 2
-    onContinue(amount, { email, firstName, lastName, phone, utmParams })
+    onContinue(finalAmount, { email, firstName, lastName, phone, utmParams })
+  }
+
+  // Listen for messages from parent window (Webflow upsell modal)
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      const { type, amount: upgradeAmount } = event.data || {}
+      
+      // Only process if we're waiting for modal response
+      if (!waitingForModal) return
+      
+      if (type === 'UPGRADE_AND_CONTINUE') {
+        // User chose to upgrade - update amount and continue to step 2
+        const finalAmount = (upgradeAmount && typeof upgradeAmount === 'number') ? upgradeAmount : amount
+        setAmount(finalAmount)
+        setCustomAmount("")
+        proceedToStep2(finalAmount)
+      }
+      
+      if (type === 'CONTINUE_WITHOUT_UPGRADE') {
+        // User declined upgrade - continue with current amount
+        proceedToStep2(amount)
+      }
+    }
+    
+    window.addEventListener('message', handleMessage)
+    return () => window.removeEventListener('message', handleMessage)
+  }, [waitingForModal, amount, email, firstName, lastName, phone, utmParams])
+  // === WEBFLOW_UPSELL_MODAL: END ===
+
+  const handleContinueClick = () => {
+    if (!validateForm()) return
+
+    // === WEBFLOW_UPSELL_MODAL: START ===
+    // Check if there's a next tier - if so, show upsell modal
+    const nextTier = getNextTierInfo(amount, config)
+    
+    if (nextTier) {
+      // Broadcast to modal and wait for response
+      setWaitingForModal(true)
+      broadcastInvestmentSelection(amount)
+      return // Don't proceed - wait for modal response
+    }
+    // === WEBFLOW_UPSELL_MODAL: END ===
+
+    // No upsell available, proceed directly
+    proceedToStep2(amount)
   }
 
   const handleResumeSelect = async (investorId: string) => {
@@ -221,6 +273,52 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
       })
     }
   }
+
+  // === WEBFLOW_UPSELL_MODAL: START ===
+  // Broadcasts investment selection to parent window for upsell modal
+  const broadcastInvestmentSelection = (selectedAmount: number) => {
+    const currentCalc = calculateInvestment(selectedAmount, config)
+    const nextTier = getNextTierInfo(selectedAmount, config)
+    
+    // Only broadcast if there's a higher tier available
+    if (!nextTier) return
+    
+    const nextTierCalc = calculateInvestment(nextTier.threshold, config)
+    
+    const payload = {
+      type: 'INVESTMENT_SELECTED',
+      
+      // Current selection
+      currentAmount: selectedAmount,
+      currentBaseShares: currentCalc.baseShares,
+      currentBonusShares: currentCalc.bonusShares,
+      currentTotalShares: currentCalc.totalShares,
+      currentBonusPercent: currentCalc.bonusPercent,
+      effectiveSharePriceCurrent: currentCalc.effectiveSharePrice,
+      
+      // Next tier (upgrade option)
+      nextTierAmount: nextTier.threshold,
+      nextTierBaseShares: nextTierCalc.baseShares,
+      nextTierBonusShares: nextTierCalc.bonusShares,
+      nextTierTotalShares: nextTierCalc.totalShares,
+      nextTierBonusPercent: nextTierCalc.bonusPercent,
+      effectiveSharePriceUpgrade: nextTierCalc.effectiveSharePrice,
+      
+      // Calculated differences
+      additionalCost: nextTier.threshold - selectedAmount,
+      additionalShares: nextTierCalc.totalShares - currentCalc.totalShares,
+      additionalSharesValue: (nextTierCalc.totalShares - currentCalc.totalShares) * config.sharePrice,
+      additionalBonusShares: nextTierCalc.bonusShares - currentCalc.bonusShares,
+      additionalBonusSharesValue: (nextTierCalc.bonusShares - currentCalc.bonusShares) * config.sharePrice,
+    }
+    
+    try {
+      window.parent?.postMessage(payload, '*')
+    } catch {
+      // Ignore cross-origin errors
+    }
+  }
+  // === WEBFLOW_UPSELL_MODAL: END ===
 
   return (
     <div className="min-h-screen flex items-start justify-start pb-24 md:pb-4 bg-transparent">
