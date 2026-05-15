@@ -4,6 +4,8 @@ import {
   getInvestorAccessLink,
   createInvestorProfile,
   isDealmakerConfigured,
+  type InvestorType,
+  type DealMakerApiError,
 } from "@/lib/dealmaker"
 
 /**

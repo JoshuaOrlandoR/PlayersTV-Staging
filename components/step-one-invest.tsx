@@ -181,7 +181,7 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
 
   // === WEBFLOW_UPSELL_MODAL: START ===
   // Actual continue function that proceeds to step 2
-  const proceedToStep2 = async (finalAmount: number) => {
+  const proceedToStep2 = (finalAmount: number) => {
     // Fire dataLayer event
     if (typeof window !== "undefined") {
       (window as Record<string, unknown[]>).dataLayer = (window as Record<string, unknown[]>).dataLayer || []
@@ -193,40 +193,8 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
     }
 
     setWaitingForModal(false)
-    
-    // === EARLY_CAPTURE: START ===
-    // Capture the lead early by creating investor profile and investor record
-    let investorId: number | undefined
-    let profileId: number | undefined
-    
-    try {
-      const captureResponse = await fetch("/api/investor/capture", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email,
-          firstName,
-          lastName,
-          phone,
-          investmentAmount: finalAmount,
-          ...utmParams,
-        }),
-      })
-      
-      if (captureResponse.ok) {
-        const captureData = await captureResponse.json()
-        if (captureData.investorId) {
-          investorId = captureData.investorId
-          profileId = captureData.profileId
-        }
-      }
-    } catch {
-      // Early capture is best-effort - continue even if it fails
-    }
-    // === EARLY_CAPTURE: END ===
-    
-    // Pass data to Step 2
-    onContinue(finalAmount, { email, firstName, lastName, phone, utmParams, investorId, profileId })
+    // Pass data to Step 2 - no API call, profile will be created in Step 2
+    onContinue(finalAmount, { email, firstName, lastName, phone, utmParams })
   }
 
   // Listen for messages from parent window (Webflow upsell modal)
@@ -264,19 +232,16 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
   const handleContinueClick = () => {
     if (!validateForm()) return
 
-    // === WEBFLOW_UPSELL_MODAL: START ===
-    // Check if there's a next tier - if so, show upsell modal
-    const nextTier = getNextTierInfo(amount, config)
-    
-    if (nextTier) {
-      // Broadcast to modal and wait for response
-      setWaitingForModal(true)
-      broadcastInvestmentSelection(amount)
-      return // Don't proceed - wait for modal response
-    }
-    // === WEBFLOW_UPSELL_MODAL: END ===
+    // === WEBFLOW_UPSELL_MODAL: TEMPORARILY DISABLED FOR TESTING ===
+    // const nextTier = getNextTierInfo(amount, config)
+    // if (nextTier) {
+    //   setWaitingForModal(true)
+    //   broadcastInvestmentSelection(amount)
+    //   return
+    // }
+    // === END DISABLED ===
 
-    // No upsell available, proceed directly
+    // Proceed directly without modal
     proceedToStep2(amount)
   }
 

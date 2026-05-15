@@ -48,6 +48,8 @@ export interface DealInvestor {
   number_of_securities: number
   state: string
   current_step: string
+  name?: string
+  created_at?: string
 }
 
 let cachedToken: { token: string; expiresAt: number } | null = null
