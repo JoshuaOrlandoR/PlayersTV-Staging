@@ -20,13 +20,12 @@ export const FALLBACK_CONFIG: InvestmentConfig = {
   campaignRaised: 14000000,
   campaignGoal: 17000000,
   // Presets aligned to $5.00/share for whole share counts
-  presetAmounts: [1000, 2500, 5000, 10000, 25000],
+  presetAmounts: [2500, 5000, 10000, 25000, 50000, 100000],
   volumeTiers: [
     { threshold: 25000, bonusPercent: 25 },
     { threshold: 10000, bonusPercent: 20 },
     { threshold: 5000, bonusPercent: 15 },
     { threshold: 2500, bonusPercent: 10 },
-    { threshold: 1000, bonusPercent: 5 },
   ],
 }
 

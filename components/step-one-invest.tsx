@@ -181,7 +181,7 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
 
   // === WEBFLOW_UPSELL_MODAL: START ===
   // Actual continue function that proceeds to step 2
-  const proceedToStep2 = (finalAmount: number) => {
+  const proceedToStep2 = async (finalAmount: number) => {
     // Fire dataLayer event
     if (typeof window !== "undefined") {
       (window as Record<string, unknown[]>).dataLayer = (window as Record<string, unknown[]>).dataLayer || []
@@ -193,8 +193,45 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
     }
 
     setWaitingForModal(false)
-    // Pass data to Step 2 - no API call, profile will be created in Step 2
-    onContinue(finalAmount, { email, firstName, lastName, phone, utmParams })
+    
+    // === EARLY_CAPTURE: START ===
+    // Capture the lead early by creating investor profile and investor record
+    let investorId: number | undefined
+    let profileId: number | undefined
+    
+    try {
+      const captureResponse = await fetch("/api/investor/capture", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          firstName,
+          lastName,
+          phone,
+          investmentAmount: finalAmount,
+          ...utmParams,
+        }),
+      })
+      
+      if (captureResponse.ok) {
+        const captureData = await captureResponse.json()
+        if (captureData.investorId) {
+          investorId = captureData.investorId
+          profileId = captureData.profileId
+          console.log("[v0] Early capture successful:", { investorId, profileId })
+        }
+      } else {
+        // Log but don't block - early capture is best-effort
+        console.log("[v0] Early capture failed, continuing without capture")
+      }
+    } catch (err) {
+      // Log but don't block - early capture is best-effort
+      console.log("[v0] Early capture error:", err)
+    }
+    // === EARLY_CAPTURE: END ===
+    
+    // Pass data to Step 2
+    onContinue(finalAmount, { email, firstName, lastName, phone, utmParams, investorId, profileId })
   }
 
   // Listen for messages from parent window (Webflow upsell modal)
@@ -217,6 +254,11 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
         // User declined upgrade - continue with current amount
         proceedToStep2(amount)
       }
+      
+      if (type === 'MODAL_DISMISSED') {
+        // User clicked X or backdrop - just reset state, don't proceed
+        setWaitingForModal(false)
+      }
     }
     
     window.addEventListener('message', handleMessage)
@@ -228,15 +270,16 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
     if (!validateForm()) return
 
     // === WEBFLOW_UPSELL_MODAL: START ===
+    // TEMPORARILY DISABLED FOR TESTING
     // Check if there's a next tier - if so, show upsell modal
-    const nextTier = getNextTierInfo(amount, config)
-    
-    if (nextTier) {
-      // Broadcast to modal and wait for response
-      setWaitingForModal(true)
-      broadcastInvestmentSelection(amount)
-      return // Don't proceed - wait for modal response
-    }
+    // const nextTier = getNextTierInfo(amount, config)
+    // 
+    // if (nextTier) {
+    //   // Broadcast to modal and wait for response
+    //   setWaitingForModal(true)
+    //   broadcastInvestmentSelection(amount)
+    //   return // Don't proceed - wait for modal response
+    // }
     // === WEBFLOW_UPSELL_MODAL: END ===
 
     // No upsell available, proceed directly
@@ -351,7 +394,7 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
                   }}
                   onBlur={handleEmailBlur}
                   placeholder="Email"
-                  className={`w-full px-4 py-3.5 text-base border rounded-lg bg-[#242424] text-white placeholder-[#808080] focus:outline-none focus:border-[#f8231b] focus:ring-2 focus:ring-[#f8231b]/20 ${
+                  className={`w-full px-4 py-4 text-base md:text-lg border rounded-lg bg-[#242424] text-white placeholder-[#808080] focus:outline-none focus:border-[#f8231b] focus:ring-2 focus:ring-[#f8231b]/20 ${
                     errors.email ? "border-[#ff4444]" : "border-[#333333]"
                   }`}
                 />
@@ -390,7 +433,7 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
                   clearError("firstName")
                 }}
                 placeholder="First Name"
-                className={`w-full px-4 py-3.5 text-base border rounded-lg bg-[#242424] text-white placeholder-[#808080] focus:outline-none focus:border-[#f8231b] focus:ring-2 focus:ring-[#f8231b]/20 ${
+                className={`w-full px-4 py-4 text-base md:text-lg border rounded-lg bg-[#242424] text-white placeholder-[#808080] focus:outline-none focus:border-[#f8231b] focus:ring-2 focus:ring-[#f8231b]/20 ${
                   errors.firstName ? "border-[#ff4444]" : "border-[#333333]"
                 }`}
               />
@@ -407,7 +450,7 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
                   clearError("lastName")
                 }}
                 placeholder="Last Name"
-                className={`w-full px-4 py-3.5 text-base border rounded-lg bg-[#242424] text-white placeholder-[#808080] focus:outline-none focus:border-[#f8231b] focus:ring-2 focus:ring-[#f8231b]/20 ${
+                className={`w-full px-4 py-4 text-base md:text-lg border rounded-lg bg-[#242424] text-white placeholder-[#808080] focus:outline-none focus:border-[#f8231b] focus:ring-2 focus:ring-[#f8231b]/20 ${
                   errors.lastName ? "border-[#ff4444]" : "border-[#333333]"
                 }`}
               />
@@ -424,7 +467,7 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
                   clearError("phone")
                 }}
                 placeholder="Phone number"
-                className={`w-full px-4 py-3.5 text-base border rounded-lg bg-[#242424] text-white placeholder-[#808080] focus:outline-none focus:border-[#f8231b] focus:ring-2 focus:ring-[#f8231b]/20 ${
+                className={`w-full px-4 py-4 text-base md:text-lg border rounded-lg bg-[#242424] text-white placeholder-[#808080] focus:outline-none focus:border-[#f8231b] focus:ring-2 focus:ring-[#f8231b]/20 ${
                   errors.phone ? "border-[#ff4444]" : "border-[#333333]"
                 }`}
               />
@@ -469,33 +512,46 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
               const presetCalc = calculateInvestment(preset, config)
               const isSelected = amount > 0 && Math.abs(amount - preset) < 1 && customAmount === ""
               const hasBonus = presetCalc.bonusPercent > 0
+              const isMostPopular = preset === 10000
 
               return (
-                <button
-                  key={preset}
-                  type="button"
-                  onClick={() => handlePresetClick(preset)}
-                  className={`w-full py-4 px-4 md:px-5 rounded-lg text-left transition-all border ${
-                    isSelected
-                      ? "bg-[#2a1515] border-[#f8231b]"
-                      : "bg-[#242424] border-[#333333] hover:border-[#f8231b]"
-                  }`}
-                >
+                <div key={preset} className="relative">
+                  {/* Most Popular Badge */}
+                  {isMostPopular && (
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
+                      <span className="bg-[#f8231b] text-white text-[10px] md:text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
+                        Most Popular
+                      </span>
+                    </div>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => handlePresetClick(preset)}
+                    className={`w-full py-5 px-4 md:px-5 rounded-lg text-left transition-all border ${
+                      isMostPopular
+                        ? isSelected
+                          ? "bg-[#2a1515] border-[#f8231b] border-2 ring-2 ring-[#f8231b]/30"
+                          : "bg-[#1f1a1a] border-[#f8231b] border-2 hover:bg-[#2a1515]"
+                        : isSelected
+                          ? "bg-[#2a1515] border-[#f8231b]"
+                          : "bg-[#242424] border-[#333333] hover:border-[#f8231b]"
+                    }`}
+                  >
                   <div className="flex items-center justify-between gap-2">
                     {/* Left side: Radio + Amount + Shares */}
                     <div className="flex items-center gap-3 md:gap-4 flex-shrink-0">
                       <div
-                        className={`w-5 h-5 md:w-6 md:h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
+                        className={`w-6 h-6 md:w-7 md:h-7 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
                           isSelected ? "border-[#f8231b]" : "border-[#444444]"
                         }`}
                       >
-                        {isSelected && <div className="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-[#f8231b]" />}
+                        {isSelected && <div className="w-3 h-3 md:w-3.5 md:h-3.5 rounded-full bg-[#f8231b]" />}
                       </div>
                       <div>
-                        <div className="text-sm md:text-base lg:text-lg font-semibold text-white">
+                        <div className="text-base md:text-lg lg:text-xl font-semibold text-white">
                           Invest {formatCurrency(preset, 0)}
                         </div>
-                        <div className="text-xs md:text-sm text-[#808080]">
+                        <div className="text-sm md:text-base text-[#808080]">
                           {formatNumber(presetCalc.baseShares)} Shares
                         </div>
                       </div>
@@ -504,33 +560,34 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
                     {/* Right side: Bonus pills */}
                     {hasBonus && (
                       <div className="flex items-center gap-1.5 md:gap-2 flex-shrink-0">
-                        <span className="text-xs md:text-[0.9375rem] font-bold py-1.5 px-4 md:py-2.5 md:px-6 rounded-md md:rounded-lg bg-[#8a0000] text-white text-center min-w-[80px] md:min-w-[120px]">
+                        <span className="text-sm md:text-base font-bold py-2 px-4 md:py-3 md:px-6 rounded-md md:rounded-lg bg-[#0d3320] text-[#1DB954] text-center min-w-[85px] md:min-w-[120px]">
                           +{formatCurrency(presetCalc.bonusShares * config.sharePrice, 0)}<br />
-                          <span className="text-[0.625rem] md:text-xs font-medium">Free Shares</span>
+                          <span className="text-[0.6875rem] md:text-sm font-medium">Free Shares</span>
                         </span>
-                        <span className="text-xs md:text-[0.9375rem] font-bold py-1.5 px-4 md:py-2.5 md:px-6 rounded-md md:rounded-lg bg-[#8a0000] text-white text-center min-w-[64px] md:min-w-[95px]">
+                        <span className="text-sm md:text-base font-bold py-2 px-4 md:py-3 md:px-6 rounded-md md:rounded-lg bg-[#8a0000] text-white text-center min-w-[68px] md:min-w-[95px]">
                           {presetCalc.bonusPercent.toFixed(0)}%<br />
-                          <span className="text-[0.625rem] md:text-xs font-medium">Bonus</span>
+                          <span className="text-[0.6875rem] md:text-sm font-medium">Bonus</span>
                         </span>
                       </div>
                     )}
                   </div>
                 </button>
+                </div>
               )
             })}
           </div>
 
           {/* Custom Amount Input */}
           <div className="mb-6">
-            <div className="flex items-center gap-2 px-4 py-3.5 border border-[#333333] rounded-lg bg-[#242424] focus-within:border-[#f8231b] focus-within:ring-2 focus-within:ring-[#f8231b]/20">
-              <span className="text-[#808080] text-[0.9375rem]">Amount: $</span>
+            <div className="flex items-center gap-2 px-4 py-4 border border-[#333333] rounded-lg bg-[#242424] focus-within:border-[#f8231b] focus-within:ring-2 focus-within:ring-[#f8231b]/20">
+              <span className="text-[#808080] text-base md:text-lg">Amount: $</span>
               <input
                 type="text"
                 inputMode="decimal"
                 value={customAmount}
                 onChange={(e) => handleCustomAmountChange(e.target.value)}
                 placeholder="Enter custom amount"
-                className="flex-1 bg-transparent text-base text-white placeholder-[#808080] focus:outline-none"
+                className="flex-1 bg-transparent text-base md:text-lg text-white placeholder-[#808080] focus:outline-none"
               />
             </div>
             {!isAboveMin && amount > 0 && (
@@ -555,7 +612,7 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
             type="button"
             onClick={handleContinueClick}
             disabled={!isFormValid}
-            className="w-full py-4 rounded-lg text-base font-semibold bg-[#f8231b] text-white hover:bg-[#d91e17] disabled:bg-[#4a4a4a] disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+            className="w-full py-4 md:py-5 rounded-lg text-base md:text-lg font-semibold bg-[#f8231b] text-white hover:bg-[#d91e17] disabled:bg-[#4a4a4a] disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
           >
             Continue <span>&rarr;</span>
           </button>
