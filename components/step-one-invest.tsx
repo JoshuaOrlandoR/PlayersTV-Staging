@@ -232,16 +232,19 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
   const handleContinueClick = () => {
     if (!validateForm()) return
 
-    // === WEBFLOW_UPSELL_MODAL: TEMPORARILY DISABLED FOR TESTING ===
-    // const nextTier = getNextTierInfo(amount, config)
-    // if (nextTier) {
-    //   setWaitingForModal(true)
-    //   broadcastInvestmentSelection(amount)
-    //   return
-    // }
-    // === END DISABLED ===
+    // === WEBFLOW_UPSELL_MODAL: START ===
+    // Check if there's a next tier - if so, show upsell modal
+    const nextTier = getNextTierInfo(amount, config)
+    
+    if (nextTier) {
+      // Broadcast to modal and wait for response
+      setWaitingForModal(true)
+      broadcastInvestmentSelection(amount)
+      return // Don't proceed - wait for modal response
+    }
+    // === WEBFLOW_UPSELL_MODAL: END ===
 
-    // Proceed directly without modal
+    // No upsell available, proceed directly
     proceedToStep2(amount)
   }
 

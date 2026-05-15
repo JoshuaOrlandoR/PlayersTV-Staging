@@ -218,11 +218,19 @@ export async function createDealInvestor(
   if (utmParams?.utm_content) utmHeaders["X-DealMaker-UTM-Content"] = utmParams.utm_content
   if (utmParams?.utm_term) utmHeaders["X-DealMaker-UTM-Term"] = utmParams.utm_term
 
-  return dmFetch<DealInvestor>(`/deals/${dealId}/investors`, {
+  console.log("[v0] === DealMaker createDealInvestor ===")
+  console.log("[v0] Endpoint: POST /deals/" + dealId + "/investors")
+  console.log("[v0] Request body:", JSON.stringify(data, null, 2))
+  console.log("[v0] UTM headers:", JSON.stringify(utmHeaders, null, 2))
+
+  const result = await dmFetch<DealInvestor>(`/deals/${dealId}/investors`, {
     method: "POST",
     body: JSON.stringify(data),
     headers: utmHeaders,
   })
+  
+  console.log("[v0] createDealInvestor response:", JSON.stringify(result, null, 2))
+  return result
 }
 
 export async function updateDealInvestor(
