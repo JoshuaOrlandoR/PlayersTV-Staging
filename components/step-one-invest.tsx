@@ -218,15 +218,10 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
         if (captureData.investorId) {
           investorId = captureData.investorId
           profileId = captureData.profileId
-          console.log("[v0] Early capture successful:", { investorId, profileId })
         }
-      } else {
-        // Log but don't block - early capture is best-effort
-        console.log("[v0] Early capture failed, continuing without capture")
       }
-    } catch (err) {
-      // Log but don't block - early capture is best-effort
-      console.log("[v0] Early capture error:", err)
+    } catch {
+      // Early capture is best-effort - continue even if it fails
     }
     // === EARLY_CAPTURE: END ===
     
@@ -270,16 +265,15 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
     if (!validateForm()) return
 
     // === WEBFLOW_UPSELL_MODAL: START ===
-    // TEMPORARILY DISABLED FOR TESTING
     // Check if there's a next tier - if so, show upsell modal
-    // const nextTier = getNextTierInfo(amount, config)
-    // 
-    // if (nextTier) {
-    //   // Broadcast to modal and wait for response
-    //   setWaitingForModal(true)
-    //   broadcastInvestmentSelection(amount)
-    //   return // Don't proceed - wait for modal response
-    // }
+    const nextTier = getNextTierInfo(amount, config)
+    
+    if (nextTier) {
+      // Broadcast to modal and wait for response
+      setWaitingForModal(true)
+      broadcastInvestmentSelection(amount)
+      return // Don't proceed - wait for modal response
+    }
     // === WEBFLOW_UPSELL_MODAL: END ===
 
     // No upsell available, proceed directly

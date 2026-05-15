@@ -140,8 +140,8 @@ export async function POST(request: Request) {
 
     // Patch the existing profile with address and additional details
     if (Object.keys(profileData).length > 0) {
-      await patchInvestorProfile(type, existingProfileId, profileData)
-      console.log("[v0] Profile updated successfully")
+      const patchResult = await patchInvestorProfile(type, existingProfileId, profileData)
+      console.log("[v0] Profile PATCH result:", JSON.stringify(patchResult, null, 2))
     }
 
     // Update the investor record if needed (e.g., if investor type changed)
