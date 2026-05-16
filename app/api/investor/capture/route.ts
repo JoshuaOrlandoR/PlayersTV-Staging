@@ -1,74 +1,51 @@
-// === EARLY_CAPTURE: This entire file is part of early capture feature ===
-// To revert: Delete this file and remove calls to /api/investor/capture
-
-import { NextResponse } from "next/server"
-
-import {
-  createInvestorProfile,
-  createDealInvestor,
+// === EARLY_CAPTURE: START ===
+import { NextRequest, NextResponse } from "next/server"
+import { 
+  createDealInvestor, 
   isDealmakerConfigured,
-  type DealMakerApiError,
-  type UtmParams,
+  type UtmParams 
 } from "@/lib/dealmaker"
 
 /**
- * POST /api/investor/capture
- * Creates a basic investor profile when user completes Step 1.
- * This captures the lead early (email, name, phone, amount) before they
- * complete the full details in Step 2.
+ * Early capture endpoint - creates investor with basic info (no profile, no address)
+ * Called when user completes Step 1 to capture lead immediately
  */
-export async function POST(request: Request) {
-  if (!isDealmakerConfigured()) {
-    return NextResponse.json(
-      { error: "DealMaker is not configured." },
-      { status: 503 }
-    )
-  }
-
-  const dealId = process.env.DEALMAKER_DEAL_ID!
-  const body = await request.json()
-
-  const { 
-    email, 
-    firstName, 
-    lastName, 
-    phone, 
-    investmentAmount,
-    utm_source, 
-    utm_medium, 
-    utm_campaign, 
-    utm_content, 
-    utm_term 
-  } = body
-
-  if (!email || !investmentAmount || !firstName || !lastName) {
-    return NextResponse.json(
-      { error: "Email, name, and investment amount are required." },
-      { status: 400 }
-    )
-  }
-
+export async function POST(req: NextRequest) {
   try {
-    // Build minimal profile data for early capture
-    const profileData: Record<string, unknown> = {
+    const body = await req.json()
+    const {
       email,
-      first_name: firstName.trim(),
-      last_name: lastName.trim(),
+      firstName,
+      lastName,
+      phone,
+      investmentAmount,
+      // UTM params
+      utm_source,
+      utm_medium,
+      utm_campaign,
+      utm_content,
+      utm_term,
+    } = body
+
+    // Validate required fields
+    if (!email || !firstName || !lastName) {
+      return NextResponse.json(
+        { error: "Email, first name, and last name are required" },
+        { status: 400 }
+      )
     }
 
-    // Add phone if provided (not in E.164 yet - we don't have country)
-    // We'll use US as default for now, will be updated in Step 2
-    if (phone) {
-      // Simple conversion assuming US/CA format
-      const digits = phone.replace(/\D/g, "")
-      if (digits.length === 10) {
-        profileData.phone_number = `+1${digits}`
-      } else if (digits.length === 11 && digits.startsWith("1")) {
-        profileData.phone_number = `+${digits}`
-      } else if (phone.startsWith("+")) {
-        profileData.phone_number = `+${digits}`
-      }
+    // If DealMaker is not configured, return mock data for development
+    if (!isDealmakerConfigured()) {
+      console.log("[v0] DealMaker not configured, returning mock capture data")
+      return NextResponse.json({
+        success: true,
+        investorId: Math.floor(Math.random() * 1000000),
+        message: "Mock capture - DealMaker not configured",
+      })
     }
+
+    const dealId = process.env.DEALMAKER_DEAL_ID!
 
     // Build UTM params
     const utmParams: UtmParams = {}
@@ -78,61 +55,58 @@ export async function POST(request: Request) {
     if (utm_content) utmParams.utm_content = utm_content
     if (utm_term) utmParams.utm_term = utm_term
 
-    console.log("[v0] Early capture - Creating individual profile")
-    const profile = await createInvestorProfile("individual", profileData)
-    const profileId = profile.id
-    console.log("[v0] Early capture - Profile created with ID:", profileId)
+    // Format phone to E.164 if provided
+    let formattedPhone = phone
+    if (phone) {
+      const digits = phone.replace(/\D/g, "")
+      if (digits.length === 10) {
+        formattedPhone = `+1${digits}`
+      } else if (digits.length === 11 && digits.startsWith("1")) {
+        formattedPhone = `+${digits}`
+      }
+    }
 
-    // Create the investor record in the deal
-    const investorData: {
-      email: string
-      first_name: string
-      last_name: string
-      phone_number?: string
-      investment_value: number
-      allocation_unit: string
-      investor_profile_id: number
-    } = {
-      email,
-      first_name: firstName.trim(),
-      last_name: lastName.trim(),
-      investment_value: investmentAmount,
-      allocation_unit: "amount",
-      investor_profile_id: profileId,
-    }
-    
-    if (profileData.phone_number) {
-      investorData.phone_number = profileData.phone_number as string
-    }
-    
-    const investor = await createDealInvestor(dealId, investorData, utmParams)
-    console.log("[v0] Early capture - Investor created with ID:", investor.id)
+    console.log("[v0] Early capture - creating investor with basic info")
+
+    // Create investor directly (no profile) - this is the early capture
+    // Investment value is set to minimum or provided amount
+    const investor = await createDealInvestor(
+      dealId,
+      {
+        email: email.toLowerCase().trim(),
+        first_name: firstName.trim(),
+        last_name: lastName.trim(),
+        phone: formattedPhone,
+        investment_value: investmentAmount || 1000, // Use provided or minimum
+        allocation_unit: "amount",
+      },
+      utmParams
+    )
+
+    console.log("[v0] Early capture successful:", { investorId: investor.id })
 
     return NextResponse.json({
       success: true,
       investorId: investor.id,
-      profileId: profileId,
       subscriptionId: investor.subscription_id,
       state: investor.state,
     })
   } catch (error) {
-    console.error("[v0] Early capture failed:", error)
-
-    const apiErr = error as Partial<DealMakerApiError>
-    const status = apiErr.status || 500
-    const responseBody = apiErr.responseBody || ""
+    console.error("[v0] Early capture error:", error)
     
-    // If 409 conflict, the investor already exists - that's okay for early capture
-    // We can try to find the existing investor or just proceed without capturing
-    if (status === 409) {
-      console.log("[v0] Early capture - Investor already exists, continuing without new capture")
+    // Check if it's a 409 conflict (investor already exists)
+    if (error instanceof Error && error.message.includes("409")) {
       return NextResponse.json({
-        success: true,
-        alreadyExists: true,
-        message: "Investor already exists for this deal"
-      })
+        success: false,
+        error: "Investor already exists",
+        code: "DUPLICATE",
+      }, { status: 409 })
     }
-
-    return NextResponse.json({ error: responseBody || "Failed to capture investor" }, { status })
+    
+    return NextResponse.json(
+      { error: "Failed to capture investor. Please try again." },
+      { status: 500 }
+    )
   }
 }
+// === EARLY_CAPTURE: END ===

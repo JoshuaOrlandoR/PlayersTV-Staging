@@ -208,14 +208,8 @@ export async function POST(request: Request) {
       investorData.investor_profile_id = profileId
     }
     
-    console.log("[v0] === CREATING DEAL INVESTOR ===")
-    console.log("[v0] Deal ID:", dealId)
-    console.log("[v0] Investor Data:", JSON.stringify(investorData, null, 2))
-    console.log("[v0] UTM Params:", JSON.stringify(utmParams, null, 2))
-    
     const investor = await createDealInvestor(dealId, investorData, utmParams)
     console.log("[v0] Investor created successfully:", investor.id)
-    console.log("[v0] Full investor response:", JSON.stringify(investor, null, 2))
 
     return NextResponse.json({
       success: true,

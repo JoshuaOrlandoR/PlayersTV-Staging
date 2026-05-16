@@ -48,8 +48,6 @@ export interface DealInvestor {
   number_of_securities: number
   state: string
   current_step: string
-  name?: string
-  created_at?: string
 }
 
 let cachedToken: { token: string; expiresAt: number } | null = null
@@ -218,19 +216,11 @@ export async function createDealInvestor(
   if (utmParams?.utm_content) utmHeaders["X-DealMaker-UTM-Content"] = utmParams.utm_content
   if (utmParams?.utm_term) utmHeaders["X-DealMaker-UTM-Term"] = utmParams.utm_term
 
-  console.log("[v0] === DealMaker createDealInvestor ===")
-  console.log("[v0] Endpoint: POST /deals/" + dealId + "/investors")
-  console.log("[v0] Request body:", JSON.stringify(data, null, 2))
-  console.log("[v0] UTM headers:", JSON.stringify(utmHeaders, null, 2))
-
-  const result = await dmFetch<DealInvestor>(`/deals/${dealId}/investors`, {
+  return dmFetch<DealInvestor>(`/deals/${dealId}/investors`, {
     method: "POST",
     body: JSON.stringify(data),
     headers: utmHeaders,
   })
-  
-  console.log("[v0] createDealInvestor response:", JSON.stringify(result, null, 2))
-  return result
 }
 
 export async function updateDealInvestor(
@@ -243,6 +233,32 @@ export async function updateDealInvestor(
     body: JSON.stringify(data),
   })
 }
+
+// === EARLY_CAPTURE: START ===
+/**
+ * PUT to update investor record (used for setting investment amount after early capture)
+ * This uses PUT instead of PATCH as DealMaker allows PUT on investors
+ */
+export async function putInvestor(
+  dealId: string,
+  investorId: number,
+  data: {
+    investment_value?: number
+    allocation_unit?: string
+    investor_profile_id?: number
+  }
+): Promise<DealInvestor & { access_link?: string }> {
+  console.log("[v0] DealMaker putInvestor:", { dealId, investorId, data })
+  
+  const result = await dmFetch<DealInvestor & { access_link?: string }>(`/deals/${dealId}/investors/${investorId}`, {
+    method: "PUT",
+    body: JSON.stringify(data),
+  })
+  
+  console.log("[v0] DealMaker putInvestor response:", JSON.stringify(result, null, 2))
+  return result
+}
+// === EARLY_CAPTURE: END ===
 
 export async function searchDealInvestors(
   dealId: string,

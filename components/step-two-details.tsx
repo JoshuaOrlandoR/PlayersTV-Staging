@@ -16,6 +16,9 @@ interface StepTwoDetailsProps {
   investorLastName: string
   investorPhone: string
   utmParams?: Record<string, string>
+  // === EARLY_CAPTURE: START ===
+  existingInvestorId?: number
+  // === EARLY_CAPTURE: END ===
   onBack: () => void
   onContinue: (data: ReviewData) => void
   config?: InvestmentConfig
@@ -305,6 +308,9 @@ export function StepTwoDetails({
   investorLastName,
   investorPhone,
   utmParams,
+  // === EARLY_CAPTURE: START ===
+  existingInvestorId,
+  // === EARLY_CAPTURE: END ===
   onBack, 
   onContinue, 
   config = FALLBACK_CONFIG 
@@ -480,8 +486,15 @@ export function StepTwoDetails({
     setIsSubmitting(true)
 
     try {
-      // Create the investor profile in DealMaker
-      const res = await fetch("/api/investor/create", {
+      // === EARLY_CAPTURE: START ===
+      // If we have an existing investor from early capture, use PUT to update
+      // Otherwise, create new investor profile via /api/investor/create
+      const endpoint = existingInvestorId ? "/api/investor/update" : "/api/investor/create"
+      console.log("[v0] Step 2 submitting to:", endpoint, existingInvestorId ? `(investorId: ${existingInvestorId})` : "(new)")
+      // === EARLY_CAPTURE: END ===
+      
+      // Create or update the investor profile in DealMaker
+      const res = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -501,6 +514,9 @@ export function StepTwoDetails({
           ...(investorType === "joint" && { jointFirstName, jointLastName }),
           ...(["corporation", "trust", "llc", "partnership"].includes(investorType) && { entityName }),
           ...utmParams,
+          // === EARLY_CAPTURE: START ===
+          existingInvestorId,
+          // === EARLY_CAPTURE: END ===
         }),
       })
 

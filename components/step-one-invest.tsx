@@ -181,7 +181,7 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
 
   // === WEBFLOW_UPSELL_MODAL: START ===
   // Actual continue function that proceeds to step 2
-  const proceedToStep2 = (finalAmount: number) => {
+  const proceedToStep2 = async (finalAmount: number) => {
     // Fire dataLayer event
     if (typeof window !== "undefined") {
       (window as Record<string, unknown[]>).dataLayer = (window as Record<string, unknown[]>).dataLayer || []
@@ -193,19 +193,62 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
     }
 
     setWaitingForModal(false)
-    // Pass data to Step 2 - no API call, profile will be created in Step 2
-    onContinue(finalAmount, { email, firstName, lastName, phone, utmParams })
+    
+    // === EARLY_CAPTURE: START ===
+    // Capture the lead early by creating investor record (no profile yet)
+    let investorId: number | undefined
+    
+    try {
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 8000) // 8 second timeout
+      
+      console.log("[v0] Attempting early capture...")
+      const captureResponse = await fetch("/api/investor/capture", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          firstName,
+          lastName,
+          phone,
+          investmentAmount: finalAmount,
+          ...utmParams,
+        }),
+        signal: controller.signal,
+      })
+      
+      clearTimeout(timeoutId)
+      
+      if (captureResponse.ok) {
+        const captureData = await captureResponse.json()
+        if (captureData.investorId) {
+          investorId = captureData.investorId
+          console.log("[v0] Early capture successful, investorId:", investorId)
+        }
+      } else {
+        console.log("[v0] Early capture failed with status:", captureResponse.status)
+      }
+    } catch (err) {
+      // Early capture is best-effort - continue even if it fails
+      console.log("[v0] Early capture error (continuing anyway):", err)
+    }
+    // === EARLY_CAPTURE: END ===
+    
+    // Pass data to Step 2 (include investorId if captured)
+    onContinue(finalAmount, { email, firstName, lastName, phone, utmParams, investorId })
   }
 
   // Listen for messages from parent window (Webflow upsell modal)
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
       const { type, amount: upgradeAmount } = event.data || {}
+      console.log("[v0] Message received:", type, "waitingForModal:", waitingForModal)
       
       // Only process if we're waiting for modal response
       if (!waitingForModal) return
       
       if (type === 'UPGRADE_AND_CONTINUE') {
+        console.log("[v0] UPGRADE_AND_CONTINUE - upgrading to:", upgradeAmount)
         // User chose to upgrade - update amount and continue to step 2
         const finalAmount = (upgradeAmount && typeof upgradeAmount === 'number') ? upgradeAmount : amount
         setAmount(finalAmount)
@@ -214,11 +257,13 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
       }
       
       if (type === 'CONTINUE_WITHOUT_UPGRADE') {
+        console.log("[v0] CONTINUE_WITHOUT_UPGRADE - proceeding with:", amount)
         // User declined upgrade - continue with current amount
         proceedToStep2(amount)
       }
       
       if (type === 'MODAL_DISMISSED') {
+        console.log("[v0] MODAL_DISMISSED - staying on Step 1")
         // User clicked X or backdrop - just reset state, don't proceed
         setWaitingForModal(false)
       }
@@ -230,21 +275,30 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
   // === WEBFLOW_UPSELL_MODAL: END ===
 
   const handleContinueClick = () => {
-    if (!validateForm()) return
+    console.log("[v0] handleContinueClick called")
+    if (!validateForm()) {
+      console.log("[v0] Form validation failed")
+      return
+    }
+    console.log("[v0] Form validated, amount:", amount)
 
     // === WEBFLOW_UPSELL_MODAL: START ===
+    // TEMPORARILY DISABLED FOR TESTING PUT APPROACH
     // Check if there's a next tier - if so, show upsell modal
-    const nextTier = getNextTierInfo(amount, config)
-    
-    if (nextTier) {
-      // Broadcast to modal and wait for response
-      setWaitingForModal(true)
-      broadcastInvestmentSelection(amount)
-      return // Don't proceed - wait for modal response
-    }
+    // const nextTier = getNextTierInfo(amount, config)
+    // console.log("[v0] Next tier check:", nextTier ? `Found tier at ${nextTier.threshold}` : "No next tier")
+    // 
+    // if (nextTier) {
+    //   // Broadcast to modal and wait for response
+    //   console.log("[v0] Broadcasting to modal, setting waitingForModal=true")
+    //   setWaitingForModal(true)
+    //   broadcastInvestmentSelection(amount)
+    //   return // Don't proceed - wait for modal response
+    // }
     // === WEBFLOW_UPSELL_MODAL: END ===
 
     // No upsell available, proceed directly
+    console.log("[v0] No upsell, proceeding directly to Step 2")
     proceedToStep2(amount)
   }
 

@@ -12,6 +12,9 @@ interface Step1Data {
   lastName: string
   phone: string
   utmParams?: Record<string, string>
+  // === EARLY_CAPTURE: START ===
+  investorId?: number
+  // === EARLY_CAPTURE: END ===
 }
 
 export default function InvestmentPage() {
@@ -132,6 +135,9 @@ export default function InvestmentPage() {
         investorLastName={step1Data.lastName}
         investorPhone={step1Data.phone}
         utmParams={step1Data.utmParams}
+        // === EARLY_CAPTURE: START ===
+        existingInvestorId={step1Data.investorId}
+        // === EARLY_CAPTURE: END ===
         onBack={handleBackToStepOne}
         onContinue={handleContinueFromStepTwo}
         config={config}
