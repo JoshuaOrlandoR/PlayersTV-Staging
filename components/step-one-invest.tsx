@@ -65,6 +65,12 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
   const [waitingForModal, setWaitingForModal] = useState(false)
   // === WEBFLOW_UPSELL_MODAL: END ===
 
+  // === EARLY_CAPTURE: START ===
+  // Track if we've already captured contact info (fires once when all 4 fields valid + user interacts elsewhere)
+  const [contactCaptured, setContactCaptured] = useState(false)
+  const [capturedInvestorId, setCapturedInvestorId] = useState<number | undefined>(undefined)
+  // === EARLY_CAPTURE: END ===
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search)
@@ -141,11 +147,15 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
     } else {
       setAmount(-1) // Reset to placeholder
     }
+    // === EARLY_CAPTURE: Trigger contact capture when user interacts with amount selection ===
+    handleAmountInteraction()
   }
 
   const handlePresetClick = (presetAmount: number) => {
     setAmount(presetAmount)
     setCustomAmount("")
+    // === EARLY_CAPTURE: Trigger contact capture when user interacts with amount selection ===
+    handleAmountInteraction()
   }
 
   const validateForm = (): boolean => {
@@ -179,6 +189,64 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
     return Object.keys(newErrors).length === 0
   }
 
+  // === EARLY_CAPTURE: START ===
+  // Check if all contact fields are valid
+  const areContactFieldsValid = () => {
+    return isValidEmail(email.trim()) && 
+           firstName.trim().length > 0 && 
+           lastName.trim().length > 0 && 
+           phone.trim().length >= 10
+  }
+
+  // Capture contact info (fires ONCE when all 4 fields valid + user interacts elsewhere)
+  const captureContactInfo = async () => {
+    if (contactCaptured) return // Already captured, don't fire again
+    if (!areContactFieldsValid()) return // Not all fields valid yet
+    
+    setContactCaptured(true) // Mark as captured immediately to prevent duplicate calls
+    console.log("[v0] CAPTURE 1: Contact info capture triggered")
+    
+    try {
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 8000)
+      
+      const res = await fetch("/api/investor/capture", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: email.trim(),
+          firstName: firstName.trim(),
+          lastName: lastName.trim(),
+          phone: phone.trim(),
+          ...utmParams,
+        }),
+        signal: controller.signal,
+      })
+      
+      clearTimeout(timeoutId)
+      
+      if (res.ok) {
+        const data = await res.json()
+        if (data.investorId) {
+          setCapturedInvestorId(data.investorId)
+          console.log("[v0] CAPTURE 1: Success - investorId:", data.investorId)
+        }
+      } else {
+        console.log("[v0] CAPTURE 1: Failed with status:", res.status)
+      }
+    } catch (err) {
+      console.log("[v0] CAPTURE 1: Error (continuing anyway):", err)
+    }
+  }
+
+  // Trigger contact capture when user interacts with amount section (first interaction only)
+  const handleAmountInteraction = () => {
+    if (!contactCaptured && areContactFieldsValid()) {
+      captureContactInfo()
+    }
+  }
+  // === EARLY_CAPTURE: END ===
+
   // === WEBFLOW_UPSELL_MODAL: START ===
   // Actual continue function that proceeds to step 2
   const proceedToStep2 = async (finalAmount: number) => {
@@ -195,42 +263,72 @@ export function StepOneInvest({ onContinue, initialAmount, config = FALLBACK_CON
     setWaitingForModal(false)
     
     // === EARLY_CAPTURE: START ===
-    // Capture the lead early by creating investor record (no profile yet)
-    let investorId: number | undefined
+    // CAPTURE 2: Add investment amount via PUT (if we have investorId from Capture 1)
+    // If contact wasn't captured yet, create investor with all info now
+    let investorId = capturedInvestorId
     
-    try {
-      const controller = new AbortController()
-      const timeoutId = setTimeout(() => controller.abort(), 8000) // 8 second timeout
-      
-      console.log("[v0] Attempting early capture...")
-      const captureResponse = await fetch("/api/investor/capture", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email,
-          firstName,
-          lastName,
-          phone,
-          investmentAmount: finalAmount,
-          ...utmParams,
-        }),
-        signal: controller.signal,
-      })
-      
-      clearTimeout(timeoutId)
-      
-      if (captureResponse.ok) {
-        const captureData = await captureResponse.json()
-        if (captureData.investorId) {
-          investorId = captureData.investorId
-          console.log("[v0] Early capture successful, investorId:", investorId)
+    if (investorId) {
+      // We have an investor from Capture 1 - PUT to add investment amount
+      console.log("[v0] CAPTURE 2: Updating investor with amount, investorId:", investorId)
+      try {
+        const controller = new AbortController()
+        const timeoutId = setTimeout(() => controller.abort(), 8000)
+        
+        const res = await fetch("/api/investor/set-amount", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            investorId,
+            investmentAmount: finalAmount,
+          }),
+          signal: controller.signal,
+        })
+        
+        clearTimeout(timeoutId)
+        
+        if (res.ok) {
+          console.log("[v0] CAPTURE 2: Success - amount updated")
+        } else {
+          console.log("[v0] CAPTURE 2: Failed with status:", res.status)
         }
-      } else {
-        console.log("[v0] Early capture failed with status:", captureResponse.status)
+      } catch (err) {
+        console.log("[v0] CAPTURE 2: Error (continuing anyway):", err)
       }
-    } catch (err) {
-      // Early capture is best-effort - continue even if it fails
-      console.log("[v0] Early capture error (continuing anyway):", err)
+    } else {
+      // Contact wasn't captured yet - create investor with all info now (fallback)
+      console.log("[v0] CAPTURE 2 (fallback): Creating investor with contact + amount")
+      try {
+        const controller = new AbortController()
+        const timeoutId = setTimeout(() => controller.abort(), 8000)
+        
+        const res = await fetch("/api/investor/capture", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: email.trim(),
+            firstName: firstName.trim(),
+            lastName: lastName.trim(),
+            phone: phone.trim(),
+            investmentAmount: finalAmount,
+            ...utmParams,
+          }),
+          signal: controller.signal,
+        })
+        
+        clearTimeout(timeoutId)
+        
+        if (res.ok) {
+          const data = await res.json()
+          if (data.investorId) {
+            investorId = data.investorId
+            console.log("[v0] CAPTURE 2 (fallback): Success - investorId:", investorId)
+          }
+        } else {
+          console.log("[v0] CAPTURE 2 (fallback): Failed with status:", res.status)
+        }
+      } catch (err) {
+        console.log("[v0] CAPTURE 2 (fallback): Error (continuing anyway):", err)
+      }
     }
     // === EARLY_CAPTURE: END ===
     

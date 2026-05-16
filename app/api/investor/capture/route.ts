@@ -66,10 +66,10 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    console.log("[v0] Early capture - creating investor with basic info")
+    console.log("[v0] Early capture - creating investor with basic info", { hasAmount: !!investmentAmount })
 
     // Create investor directly (no profile) - this is the early capture
-    // Investment value is set to minimum or provided amount
+    // If no investment amount provided (Capture 1), use minimum. Otherwise use provided amount (Capture 2 fallback).
     const investor = await createDealInvestor(
       dealId,
       {
@@ -83,7 +83,7 @@ export async function POST(req: NextRequest) {
       utmParams
     )
 
-    console.log("[v0] Early capture successful:", { investorId: investor.id })
+    console.log("[v0] Early capture successful:", { investorId: investor.id, hadAmount: !!investmentAmount })
 
     return NextResponse.json({
       success: true,
